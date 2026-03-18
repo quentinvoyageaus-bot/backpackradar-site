@@ -60,5 +60,13 @@
     <h2>12. Contact</h2>
     <p>For questions about these terms, contact us at <a href="mailto:support@backpackradar.app">support@backpackradar.app</a>.</p>
 </div>
+<script>
+const lang = localStorage.getItem("br-site-lang") || "en";
+if (lang === "fr") document.querySelector("h1").textContent = "Conditions d'utilisation";
+if (lang === "de") document.querySelector("h1").textContent = "Nutzungsbedingungen";
+if (lang === "it") document.querySelector("h1").textContent = "Termini di servizio";
+if (lang === "es") document.querySelector("h1").textContent = "Términos de servicio";
+if (lang === "pt") document.querySelector("h1").textContent = "Termos de serviço";
+</script>
 </body>
 </html>

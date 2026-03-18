@@ -57,5 +57,13 @@
     <h2>11. Contact</h2>
     <p>If you have questions about this privacy policy, contact us at <a href="mailto:support@backpackradar.app">support@backpackradar.app</a>.</p>
 </div>
+<script>
+const lang = localStorage.getItem("br-site-lang") || "en";
+if (lang === "fr") document.querySelector("h1").textContent = "Politique de confidentialité";
+if (lang === "de") document.querySelector("h1").textContent = "Datenschutzrichtlinie";
+if (lang === "it") document.querySelector("h1").textContent = "Informativa sulla privacy";
+if (lang === "es") document.querySelector("h1").textContent = "Política de privacidad";
+if (lang === "pt") document.querySelector("h1").textContent = "Política de privacidade";
+</script>
 </body>
 </html>
