@@ -5,68 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service — BackpackRadar</title>
     <link rel="icon" type="image/png" href="/logo-192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Outfit', sans-serif; background: #060a14; color: #f1f5f9; line-height: 1.8; }
-        .container { max-width: 700px; margin: 0 auto; padding: 80px 24px 60px; }
-        a { color: #06b6d4; }
-        h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
-        .updated { color: #94a3b8; font-size: 14px; margin-bottom: 40px; }
-        h2 { font-size: 20px; font-weight: 700; margin: 32px 0 12px; color: #06b6d4; }
-        p { color: #94a3b8; margin-bottom: 16px; font-size: 15px; }
-        .back { display: inline-flex; align-items: center; gap: 8px; color: #06b6d4; text-decoration: none; font-size: 14px; font-weight: 600; margin-bottom: 32px; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Outfit',sans-serif;background:#060a14;color:#f1f5f9;line-height:1.8}
+        .container{max-width:700px;margin:0 auto;padding:80px 24px 60px}
+        a{color:#06b6d4}
+        h1{font-size:32px;font-weight:800;margin-bottom:8px}
+        .updated{color:#94a3b8;font-size:14px;margin-bottom:40px}
+        h2{font-size:20px;font-weight:700;margin:32px 0 12px;color:#06b6d4}
+        p{color:#94a3b8;margin-bottom:16px;font-size:15px}
+        .lang-bar{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 24px;background:rgba(6,10,20,.9);backdrop-filter:blur(20px);border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
+        .lang-bar a{color:#06b6d4;text-decoration:none;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+        .lang-btns{display:flex;gap:4px}
+        .lang-btns button{background:#111827;border:1px solid #1e293b;color:#94a3b8;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif}
+        .lang-btns button.active{color:#06b6d4;border-color:#06b6d4;background:rgba(6,182,212,.1)}
+        .lang-btns button:hover{border-color:#06b6d4}
     </style>
 </head>
 <body>
-<div class="container">
-    <a href="/" class="back">← Back to BackpackRadar</a>
-    <h1>Terms of Service</h1>
-    <p class="updated">Last updated: March 18, 2026</p>
-
-    <h2>1. Acceptance of Terms</h2>
-    <p>By using BackpackRadar, you agree to these terms of service. If you do not agree, please do not use the app.</p>
-
-    <h2>2. Description of Service</h2>
-    <p>BackpackRadar is a job alert service that aggregates and filters job listings from Seek.com.au for backpackers and Working Holiday Visa (WHV) holders in Australia. We provide real-time notifications of job opportunities across five Australian cities.</p>
-
-    <h2>3. User Accounts</h2>
-    <p>You must create an account to use BackpackRadar. You are responsible for maintaining the security of your account credentials. You must provide accurate information when creating your account.</p>
-
-    <h2>4. Subscription Plans</h2>
-    <p>BackpackRadar offers free and paid subscription plans. Paid plans are billed monthly. You can upgrade, downgrade, or cancel your plan at any time. Refunds are handled on a case-by-case basis.</p>
-
-    <h2>5. Job Listings</h2>
-    <p>Job listings are sourced from third-party websites and are provided as-is. BackpackRadar does not guarantee the accuracy, availability, or suitability of any job listing. We are not responsible for the content of external job postings or the hiring decisions of employers.</p>
-
-    <h2>6. AI Filtering</h2>
-    <p>Our AI filtering system attempts to identify jobs suitable for WHV holders, but it is not perfect. Some jobs may be incorrectly included or excluded. Always verify job requirements before applying.</p>
-
-    <h2>7. Acceptable Use</h2>
-    <p>You agree not to misuse the service, including attempting to scrape data, circumvent subscription limits, create multiple accounts, or use the service for any unlawful purpose.</p>
-
-    <h2>8. Intellectual Property</h2>
-    <p>The BackpackRadar app, brand, and original content are owned by BackpackRadar. Job listing content belongs to the respective employers and job platforms.</p>
-
-    <h2>9. Limitation of Liability</h2>
-    <p>BackpackRadar is provided as-is without warranties of any kind. We are not liable for any damages arising from your use of the service, including missed job opportunities, inaccurate listings, or service interruptions.</p>
-
-    <h2>10. Modifications</h2>
-    <p>We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of the new terms.</p>
-
-    <h2>11. Termination</h2>
-    <p>We may suspend or terminate your account if you violate these terms. You may delete your account at any time through the app settings.</p>
-
-    <h2>12. Contact</h2>
-    <p>For questions about these terms, contact us at <a href="mailto:support@backpackradar.app">support@backpackradar.app</a>.</p>
+<div class="lang-bar">
+    <a href="/">← BackpackRadar</a>
+    <div class="lang-btns">
+        <button onclick="setL('en')" class="active">🇬🇧</button>
+        <button onclick="setL('fr')">🇫🇷</button>
+        <button onclick="setL('de')">🇩🇪</button>
+        <button onclick="setL('it')">🇮🇹</button>
+        <button onclick="setL('es')">🇪🇸</button>
+        <button onclick="setL('pt')">🇵🇹</button>
+    </div>
+</div>
+<div class="container" style="padding-top:100px">
+    <h1 id="title">Terms of Service</h1>
+    <p class="updated" id="updated">Last updated: March 18, 2026</p>
+    <div id="content"></div>
 </div>
 <script>
-const lang = localStorage.getItem("br-site-lang") || "en";
-if (lang === "fr") document.querySelector("h1").textContent = "Conditions d'utilisation";
-if (lang === "de") document.querySelector("h1").textContent = "Nutzungsbedingungen";
-if (lang === "it") document.querySelector("h1").textContent = "Termini di servizio";
-if (lang === "es") document.querySelector("h1").textContent = "Términos de servicio";
-if (lang === "pt") document.querySelector("h1").textContent = "Termos de serviço";
+const T={
+en:[
+["Acceptance of Terms","By using BackpackRadar, you agree to these terms of service. If you do not agree, please do not use the app."],
+["Description of Service","BackpackRadar is a job alert service that aggregates and filters job listings from Seek.com.au for backpackers and Working Holiday Visa (WHV) holders in Australia. We provide real-time notifications of job opportunities across five Australian cities."],
+["User Accounts","You must create an account to use BackpackRadar. You are responsible for maintaining the security of your account credentials. You must provide accurate information when creating your account."],
+["Subscription Plans","BackpackRadar offers free and paid subscription plans. Paid plans are billed monthly. You can upgrade, downgrade, or cancel your plan at any time. Refunds are handled on a case-by-case basis."],
+["Job Listings","Job listings are sourced from third-party websites and are provided as-is. BackpackRadar does not guarantee the accuracy, availability, or suitability of any job listing. We are not responsible for the content of external job postings or the hiring decisions of employers."],
+["AI Filtering","Our AI filtering system attempts to identify jobs suitable for WHV holders, but it is not perfect. Some jobs may be incorrectly included or excluded. Always verify job requirements before applying."],
+["Acceptable Use","You agree not to misuse the service, including attempting to scrape data, circumvent subscription limits, create multiple accounts, or use the service for any unlawful purpose."],
+["Intellectual Property","The BackpackRadar app, brand, and original content are owned by BackpackRadar. Job listing content belongs to the respective employers and job platforms."],
+["Limitation of Liability","BackpackRadar is provided as-is without warranties of any kind. We are not liable for any damages arising from your use of the service, including missed job opportunities, inaccurate listings, or service interruptions."],
+["Modifications","We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of the new terms."],
+["Termination","We may suspend or terminate your account if you violate these terms. You may delete your account at any time through the app settings."],
+["Contact","For questions about these terms, contact us at <a href='mailto:support@backpackradar.app'>support@backpackradar.app</a>."]
+],
+fr:[
+["Acceptation des conditions","En utilisant BackpackRadar, vous acceptez ces conditions d'utilisation. Si vous n'êtes pas d'accord, veuillez ne pas utiliser l'application."],
+["Description du service","BackpackRadar est un service d'alertes d'emploi qui agrège et filtre les offres de Seek.com.au pour les backpackers et détenteurs de PVT (WHV) en Australie. Nous fournissons des notifications en temps réel d'opportunités d'emploi dans cinq villes australiennes."],
+["Comptes utilisateurs","Vous devez créer un compte pour utiliser BackpackRadar. Vous êtes responsable de la sécurité de vos identifiants. Vous devez fournir des informations exactes lors de la création de votre compte."],
+["Forfaits d'abonnement","BackpackRadar propose des forfaits gratuits et payants. Les forfaits payants sont facturés mensuellement. Vous pouvez améliorer, rétrograder ou annuler votre forfait à tout moment. Les remboursements sont traités au cas par cas."],
+["Offres d'emploi","Les offres d'emploi proviennent de sites tiers et sont fournies telles quelles. BackpackRadar ne garantit pas l'exactitude, la disponibilité ou l'adéquation d'une offre d'emploi. Nous ne sommes pas responsables du contenu des offres externes ni des décisions d'embauche des employeurs."],
+["Filtrage par IA","Notre système de filtrage par IA tente d'identifier les emplois adaptés aux détenteurs de PVT, mais il n'est pas parfait. Certains emplois peuvent être incorrectement inclus ou exclus. Vérifiez toujours les exigences avant de postuler."],
+["Utilisation acceptable","Vous acceptez de ne pas abuser du service, notamment en tentant de scraper des données, de contourner les limites d'abonnement, de créer plusieurs comptes ou d'utiliser le service à des fins illégales."],
+["Propriété intellectuelle","L'application BackpackRadar, la marque et le contenu original sont la propriété de BackpackRadar. Le contenu des offres d'emploi appartient aux employeurs et plateformes d'emploi respectifs."],
+["Limitation de responsabilité","BackpackRadar est fourni tel quel, sans garantie d'aucune sorte. Nous ne sommes pas responsables des dommages résultant de votre utilisation du service, y compris les opportunités d'emploi manquées, les offres inexactes ou les interruptions de service."],
+["Modifications","Nous nous réservons le droit de modifier ces conditions à tout moment. L'utilisation continue du service après les modifications vaut acceptation des nouvelles conditions."],
+["Résiliation","Nous pouvons suspendre ou résilier votre compte si vous violez ces conditions. Vous pouvez supprimer votre compte à tout moment via les paramètres de l'application."],
+["Contact","Pour toute question sur ces conditions, contactez-nous à <a href='mailto:support@backpackradar.app'>support@backpackradar.app</a>."]
+],
+de:[
+["Annahme der Bedingungen","Durch die Nutzung von BackpackRadar stimmen Sie diesen Nutzungsbedingungen zu. Wenn Sie nicht einverstanden sind, verwenden Sie die App bitte nicht."],
+["Beschreibung des Dienstes","BackpackRadar ist ein Job-Alert-Service, der Stellenangebote von Seek.com.au für Backpacker und Working-Holiday-Visa (WHV)-Inhaber in Australien aggregiert und filtert. Wir bieten Echtzeit-Benachrichtigungen über Jobmöglichkeiten in fünf australischen Städten."],
+["Benutzerkonten","Sie müssen ein Konto erstellen, um BackpackRadar zu nutzen. Sie sind für die Sicherheit Ihrer Zugangsdaten verantwortlich. Sie müssen bei der Kontoerstellung korrekte Angaben machen."],
+["Abonnementpläne","BackpackRadar bietet kostenlose und kostenpflichtige Abonnementpläne an. Kostenpflichtige Pläne werden monatlich abgerechnet. Sie können Ihren Plan jederzeit upgraden, downgraden oder kündigen. Rückerstattungen werden im Einzelfall behandelt."],
+["Stellenangebote","Stellenangebote stammen von Drittanbieter-Websites und werden ohne Gewähr bereitgestellt. BackpackRadar garantiert nicht die Richtigkeit, Verfügbarkeit oder Eignung eines Stellenangebots. Wir sind nicht verantwortlich für den Inhalt externer Stellenangebote oder die Einstellungsentscheidungen der Arbeitgeber."],
+["KI-Filterung","Unser KI-Filtersystem versucht, für WHV-Inhaber geeignete Jobs zu identifizieren, ist aber nicht perfekt. Einige Jobs können fälschlicherweise ein- oder ausgeschlossen werden. Überprüfen Sie immer die Anforderungen vor der Bewerbung."],
+["Akzeptable Nutzung","Sie stimmen zu, den Service nicht zu missbrauchen, einschließlich des Versuchs, Daten zu scrapen, Abonnementlimits zu umgehen, mehrere Konten zu erstellen oder den Service für rechtswidrige Zwecke zu nutzen."],
+["Geistiges Eigentum","Die BackpackRadar-App, Marke und Originalinhalte sind Eigentum von BackpackRadar. Der Inhalt der Stellenangebote gehört den jeweiligen Arbeitgebern und Jobplattformen."],
+["Haftungsbeschränkung","BackpackRadar wird ohne jegliche Gewährleistung bereitgestellt. Wir haften nicht für Schäden, die aus Ihrer Nutzung des Dienstes entstehen, einschließlich verpasster Jobmöglichkeiten, ungenauer Angebote oder Serviceunterbrechungen."],
+["Änderungen","Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern. Die fortgesetzte Nutzung des Dienstes nach Änderungen gilt als Annahme der neuen Bedingungen."],
+["Kündigung","Wir können Ihr Konto sperren oder kündigen, wenn Sie gegen diese Bedingungen verstoßen. Sie können Ihr Konto jederzeit über die App-Einstellungen löschen."],
+["Kontakt","Bei Fragen zu diesen Bedingungen kontaktieren Sie uns unter <a href='mailto:support@backpackradar.app'>support@backpackradar.app</a>."]
+],
+it:[
+["Accettazione dei termini","Utilizzando BackpackRadar, accetti questi termini di servizio. Se non sei d'accordo, ti preghiamo di non utilizzare l'app."],
+["Descrizione del servizio","BackpackRadar è un servizio di avvisi di lavoro che aggrega e filtra le offerte da Seek.com.au per backpacker e titolari di Working Holiday Visa (WHV) in Australia. Forniamo notifiche in tempo reale di opportunità di lavoro in cinque città australiane."],
+["Account utente","Devi creare un account per utilizzare BackpackRadar. Sei responsabile della sicurezza delle tue credenziali. Devi fornire informazioni accurate durante la creazione dell'account."],
+["Piani di abbonamento","BackpackRadar offre piani gratuiti e a pagamento. I piani a pagamento vengono fatturati mensilmente. Puoi aggiornare, declassare o annullare il tuo piano in qualsiasi momento. I rimborsi vengono gestiti caso per caso."],
+["Offerte di lavoro","Le offerte di lavoro provengono da siti di terze parti e sono fornite così come sono. BackpackRadar non garantisce l'accuratezza, la disponibilità o l'idoneità di qualsiasi offerta. Non siamo responsabili del contenuto delle offerte esterne o delle decisioni di assunzione dei datori di lavoro."],
+["Filtro IA","Il nostro sistema di filtro IA tenta di identificare i lavori adatti ai titolari di WHV, ma non è perfetto. Alcuni lavori possono essere inclusi o esclusi erroneamente. Verifica sempre i requisiti prima di candidarti."],
+["Uso accettabile","Accetti di non abusare del servizio, incluso il tentativo di scraping dei dati, aggirare i limiti dell'abbonamento, creare più account o utilizzare il servizio per scopi illeciti."],
+["Proprietà intellettuale","L'app BackpackRadar, il marchio e i contenuti originali sono di proprietà di BackpackRadar. Il contenuto delle offerte di lavoro appartiene ai rispettivi datori di lavoro e piattaforme."],
+["Limitazione di responsabilità","BackpackRadar è fornito così com'è, senza garanzie di alcun tipo. Non siamo responsabili per danni derivanti dall'uso del servizio, incluse opportunità di lavoro perse, offerte inesatte o interruzioni del servizio."],
+["Modifiche","Ci riserviamo il diritto di modificare questi termini in qualsiasi momento. L'uso continuato del servizio dopo le modifiche costituisce accettazione dei nuovi termini."],
+["Risoluzione","Possiamo sospendere o terminare il tuo account se violi questi termini. Puoi eliminare il tuo account in qualsiasi momento tramite le impostazioni dell'app."],
+["Contatto","Per domande su questi termini, contattaci a <a href='mailto:support@backpackradar.app'>support@backpackradar.app</a>."]
+],
+es:[
+["Aceptación de los términos","Al usar BackpackRadar, aceptas estos términos de servicio. Si no estás de acuerdo, por favor no uses la aplicación."],
+["Descripción del servicio","BackpackRadar es un servicio de alertas de empleo que agrega y filtra ofertas de Seek.com.au para mochileros y titulares de Working Holiday Visa (WHV) en Australia. Proporcionamos notificaciones en tiempo real de oportunidades de empleo en cinco ciudades australianas."],
+["Cuentas de usuario","Debes crear una cuenta para usar BackpackRadar. Eres responsable de mantener la seguridad de tus credenciales. Debes proporcionar información precisa al crear tu cuenta."],
+["Planes de suscripción","BackpackRadar ofrece planes gratuitos y de pago. Los planes de pago se facturan mensualmente. Puedes mejorar, degradar o cancelar tu plan en cualquier momento. Los reembolsos se manejan caso por caso."],
+["Ofertas de empleo","Las ofertas de empleo provienen de sitios de terceros y se proporcionan tal cual. BackpackRadar no garantiza la precisión, disponibilidad o idoneidad de ninguna oferta. No somos responsables del contenido de las ofertas externas ni de las decisiones de contratación de los empleadores."],
+["Filtrado por IA","Nuestro sistema de filtrado por IA intenta identificar empleos adecuados para titulares de WHV, pero no es perfecto. Algunos empleos pueden ser incluidos o excluidos incorrectamente. Verifica siempre los requisitos antes de postularte."],
+["Uso aceptable","Aceptas no abusar del servicio, incluyendo intentar extraer datos, eludir límites de suscripción, crear múltiples cuentas o usar el servicio para fines ilegales."],
+["Propiedad intelectual","La app BackpackRadar, la marca y el contenido original son propiedad de BackpackRadar. El contenido de las ofertas pertenece a los respectivos empleadores y plataformas de empleo."],
+["Limitación de responsabilidad","BackpackRadar se proporciona tal cual, sin garantías de ningún tipo. No somos responsables de ningún daño derivado de tu uso del servicio, incluyendo oportunidades perdidas, ofertas inexactas o interrupciones del servicio."],
+["Modificaciones","Nos reservamos el derecho de modificar estos términos en cualquier momento. El uso continuado del servicio después de los cambios constituye la aceptación de los nuevos términos."],
+["Terminación","Podemos suspender o terminar tu cuenta si violas estos términos. Puedes eliminar tu cuenta en cualquier momento a través de la configuración de la app."],
+["Contacto","Para preguntas sobre estos términos, contáctanos en <a href='mailto:support@backpackradar.app'>support@backpackradar.app</a>."]
+],
+pt:[
+["Aceitação dos termos","Ao usar o BackpackRadar, concorda com estes termos de serviço. Se não concordar, por favor não use a aplicação."],
+["Descrição do serviço","O BackpackRadar é um serviço de alertas de emprego que agrega e filtra ofertas do Seek.com.au para mochileiros e titulares de Working Holiday Visa (WHV) na Austrália. Fornecemos notificações em tempo real de oportunidades de emprego em cinco cidades australianas."],
+["Contas de utilizador","Deve criar uma conta para usar o BackpackRadar. É responsável por manter a segurança das suas credenciais. Deve fornecer informações precisas ao criar a sua conta."],
+["Planos de subscrição","O BackpackRadar oferece planos gratuitos e pagos. Os planos pagos são faturados mensalmente. Pode melhorar, reduzir ou cancelar o seu plano a qualquer momento. Os reembolsos são tratados caso a caso."],
+["Ofertas de emprego","As ofertas de emprego provêm de sites de terceiros e são fornecidas tal como estão. O BackpackRadar não garante a precisão, disponibilidade ou adequação de qualquer oferta. Não somos responsáveis pelo conteúdo das ofertas externas ou pelas decisões de contratação dos empregadores."],
+["Filtro de IA","O nosso sistema de filtro de IA tenta identificar empregos adequados para titulares de WHV, mas não é perfeito. Alguns empregos podem ser incorretamente incluídos ou excluídos. Verifique sempre os requisitos antes de se candidatar."],
+["Uso aceitável","Concorda em não abusar do serviço, incluindo tentar extrair dados, contornar limites de subscrição, criar múltiplas contas ou usar o serviço para fins ilegais."],
+["Propriedade intelectual","A app BackpackRadar, a marca e o conteúdo original são propriedade do BackpackRadar. O conteúdo das ofertas pertence aos respetivos empregadores e plataformas de emprego."],
+["Limitação de responsabilidade","O BackpackRadar é fornecido tal como está, sem garantias de qualquer tipo. Não somos responsáveis por quaisquer danos decorrentes da sua utilização do serviço, incluindo oportunidades perdidas, ofertas imprecisas ou interrupções do serviço."],
+["Modificações","Reservamo-nos o direito de modificar estes termos a qualquer momento. O uso continuado do serviço após as alterações constitui aceitação dos novos termos."],
+["Rescisão","Podemos suspender ou terminar a sua conta se violar estes termos. Pode eliminar a sua conta a qualquer momento através das definições da app."],
+["Contacto","Para questões sobre estes termos, contacte-nos em <a href='mailto:support@backpackradar.app'>support@backpackradar.app</a>."]
+]
+};
+const titles={en:"Terms of Service",fr:"Conditions d'utilisation",de:"Nutzungsbedingungen",it:"Termini di servizio",es:"Términos de servicio",pt:"Termos de serviço"};
+const upd={en:"Last updated: March 18, 2026",fr:"Dernière mise à jour : 18 mars 2026",de:"Zuletzt aktualisiert: 18. März 2026",it:"Ultimo aggiornamento: 18 marzo 2026",es:"Última actualización: 18 de marzo de 2026",pt:"Última atualização: 18 de março de 2026"};
+
+function setL(l){
+    localStorage.setItem("br-site-lang",l);
+    document.getElementById("title").textContent=titles[l];
+    document.getElementById("updated").textContent=upd[l];
+    let html="";
+    T[l].forEach((s,i)=>{html+=`<h2>${i+1}. ${s[0]}</h2><p>${s[1]}</p>`});
+    document.getElementById("content").innerHTML=html;
+    document.querySelectorAll(".lang-btns button").forEach(b=>{b.classList.remove("active")});
+    document.querySelectorAll(".lang-btns button")[["en","fr","de","it","es","pt"].indexOf(l)].classList.add("active");
+}
+document.addEventListener("DOMContentLoaded",()=>{setL(localStorage.getItem("br-site-lang")||"en")});
 </script>
 </body>
 </html>
