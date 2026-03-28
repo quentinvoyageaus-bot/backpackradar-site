@@ -1,332 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BackpackRadar — The All-in-One App for Backpackers in Australia</title>
-    <meta name="description" content="Job alerts, 88 Days Tracker, salary calculator, hostel finder, WHV guide & more for Working Holiday Visa holders in Australia.">
-    <meta property="og:title" content="BackpackRadar — The All-in-One App for Backpackers in Australia">
-    <meta property="og:description" content="Job alerts, 88 Days Tracker, salary calculator, hostel finder & WHV guide. 5 cities, 6 languages.">
-    <meta property="og:image" content="/logo-512.png">
-    <meta property="og:url" content="https://backpackradar.app">
-    <meta name="theme-color" content="#06b6d4">
-    <link rel="icon" type="image/png" href="/logo-192.png">
-    <link rel="apple-touch-icon" href="/logo-192.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>BackpackRadar — Ton radar à jobs en Australie 🦘</title>
+    <meta name="description" content="L'app qui trouve tes jobs en WHV Australie. Alertes emploi par IA, outils backpackers, communauté par ville.">
+    <meta property="og:title" content="BackpackRadar — Ton radar à jobs en Australie 🦘">
+    <meta property="og:description" content="Alertes emploi par IA, outils WHV, communauté backpackers. Rejoins la waitlist !">
+    <meta name="theme-color" content="#0B1120">
+    <link rel="icon" type="image/png" href="logo-192.png">
+    <link rel="apple-touch-icon" href="logo-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        :root {
-            --bg:#060a14; --bg2:#0c1222; --surface:#111827; --border:#1e293b;
-            --text:#f1f5f9; --text-muted:#94a3b8; --primary:#06b6d4;
-            --primary-glow:#06b6d440; --accent:#a3e635; --accent-glow:#a3e63540;
-        }
-        html { scroll-behavior:smooth; }
-        body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; line-height:1.6; }
-
-        .bg-grid { position:fixed; inset:0; background-image:linear-gradient(rgba(6,182,212,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,.03) 1px,transparent 1px); background-size:60px 60px; z-index:0; pointer-events:none; }
-        .bg-orb { position:fixed; border-radius:50%; filter:blur(120px); z-index:0; pointer-events:none; }
-        .bg-orb-1 { width:600px; height:600px; background:var(--primary-glow); top:-200px; right:-200px; }
-        .bg-orb-2 { width:500px; height:500px; background:var(--accent-glow); bottom:20%; left:-250px; }
-
-        nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 24px; backdrop-filter:blur(20px); background:rgba(6,10,20,.8); border-bottom:1px solid var(--border); }
-        .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
-        .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-        .nav-brand img { width:36px; height:36px; border-radius:10px; background:#0c1222; }
-        .nav-brand span { font-weight:700; font-size:18px; }
-        .nav-brand em { font-style:normal; color:var(--primary); }
-        .nav-links { display:flex; gap:24px; align-items:center; }
-        .nav-links a { color:var(--text-muted); text-decoration:none; font-size:14px; font-weight:500; transition:color .2s; }
-        .nav-links a:hover { color:var(--primary); }
-        .nav-cta { background:#000; color:#fff; padding:10px 22px; border-radius:10px; font-weight:600; font-size:14px; text-decoration:none; transition:all .2s; }
-        .nav-cta:hover { transform:translateY(-1px); }
-
-        .lang-picker { position:relative; }
-        .lang-btn { background:var(--surface); border:1px solid var(--border); color:var(--text); padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px; font-family:'Outfit',sans-serif; }
-        .lang-btn:hover { border-color:var(--primary); }
-        .lang-dropdown { position:absolute; top:44px; right:0; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:6px; min-width:150px; display:none; z-index:200; box-shadow:0 10px 30px rgba(0,0,0,.5); }
-        .lang-dropdown.open { display:block; }
-        .lang-option { width:100%; padding:8px 12px; background:none; border:none; color:var(--text-muted); font-size:13px; cursor:pointer; border-radius:8px; text-align:left; display:flex; align-items:center; gap:8px; font-family:'Outfit',sans-serif; }
-        .lang-option:hover { background:rgba(6,182,212,.1); color:var(--primary); }
-        .lang-option.active { color:var(--primary); font-weight:600; }
-
-        section { position:relative; z-index:1; }
-        .hero { min-height:100vh; display:flex; align-items:center; padding:120px 24px 80px; }
-        .hero-inner { max-width:1100px; margin:0 auto; text-align:center; }
-        .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(6,182,212,.1); border:1px solid rgba(6,182,212,.2); padding:6px 16px; border-radius:50px; font-size:13px; color:var(--primary); font-weight:500; margin-bottom:24px; }
-        .hero-badge::before { content:'🇦🇺'; }
-        .hero h1 { font-size:clamp(36px,6vw,64px); font-weight:800; line-height:1.05; letter-spacing:-2px; margin-bottom:20px; }
-        .hero h1 .hl { color:var(--primary); }
-        .hero h1 .ac { color:var(--accent); }
-        .hero-desc { font-size:18px; color:var(--text-muted); line-height:1.7; margin-bottom:36px; max-width:600px; margin-left:auto; margin-right:auto; }
-        .hero-buttons { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-        .btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--primary); color:#000; padding:16px 32px; border-radius:14px; font-weight:700; font-size:16px; text-decoration:none; transition:all .3s; box-shadow:0 0 30px var(--primary-glow); }
-        .btn-primary:hover { transform:translateY(-2px); }
-        .btn-secondary { display:inline-flex; align-items:center; gap:10px; background:var(--surface); color:var(--text); padding:16px 32px; border-radius:14px; font-weight:600; font-size:16px; text-decoration:none; border:1px solid var(--border); transition:all .3s; }
-        .btn-secondary:hover { border-color:var(--primary); }
-
-        .tools { padding:80px 24px; }
-        .tools-inner { max-width:1100px; margin:0 auto; }
-        .section-title { text-align:center; margin-bottom:50px; }
-        .section-title h2 { font-size:clamp(28px,4vw,42px); font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
-        .section-title p { color:var(--text-muted); font-size:16px; max-width:500px; margin:0 auto; }
-        .tools-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
-        .tool-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px; transition:all .3s; }
-        .tool-card:hover { border-color:var(--primary); transform:translateY(-4px); }
-        .tool-emoji { font-size:32px; margin-bottom:12px; display:block; }
-        .tool-card h3 { font-size:16px; font-weight:700; margin-bottom:6px; }
-        .tool-card p { font-size:13px; color:var(--text-muted); line-height:1.5; }
-
-        .features { padding:80px 24px; }
-        .features-inner { max-width:1100px; margin:0 auto; }
-        .features-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-        .feature-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px; transition:all .3s; }
-        .feature-card:hover { border-color:var(--primary); transform:translateY(-4px); }
-        .feature-card h3 { font-size:16px; font-weight:700; margin-bottom:6px; }
-        .feature-card p { font-size:13px; color:var(--text-muted); line-height:1.5; }
-
-        .cities { padding:60px 24px; }
-        .cities-inner { max-width:1100px; margin:0 auto; }
-        .cities-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
-        .city-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:24px 16px; text-align:center; transition:all .3s; }
-        .city-card:hover { border-color:var(--primary); transform:translateY(-4px); }
-        .city-emoji { font-size:36px; margin-bottom:8px; display:block; }
-        .city-name { font-weight:700; font-size:16px; }
-        .city-sub { font-size:12px; color:var(--text-muted); margin-top:4px; }
-
-        .plans { padding:80px 24px; }
-        .plans-inner { max-width:900px; margin:0 auto; }
-        .plans-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
-        .plan-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px 20px; text-align:center; position:relative; }
-        .plan-card.pop { border-color:var(--primary); box-shadow:0 0 40px var(--primary-glow); }
-        .plan-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--primary); color:#000; font-size:11px; font-weight:700; padding:4px 16px; border-radius:50px; }
-        .plan-price { font-size:36px; font-weight:800; color:var(--primary); font-family:'Space Mono',monospace; }
-        .plan-period { font-size:14px; color:var(--text-muted); }
-        .plan-name { font-size:18px; font-weight:700; margin:10px 0; }
-        .plan-features { list-style:none; text-align:left; margin:16px 0; }
-        .plan-features li { font-size:13px; color:var(--text-muted); padding:4px 0; display:flex; align-items:center; gap:8px; }
-        .plan-features li::before { content:'✓'; color:var(--primary); font-weight:700; }
-        .plan-features li.no::before { content:'✗'; color:#475569; }
-        .plan-features li.no { color:#475569; }
-        .plan-btn { width:100%; padding:12px; border-radius:12px; font-weight:700; font-size:14px; border:none; cursor:pointer; font-family:'Outfit',sans-serif; }
-        .plan-btn-p { background:var(--primary); color:#000; }
-        .plan-btn-s { background:var(--bg2); color:var(--text); border:1px solid var(--border); }
-
-        footer { border-top:1px solid var(--border); padding:60px 24px 40px; position:relative; z-index:1; }
-        .footer-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:40px; }
-        .footer-brand p { color:var(--text-muted); font-size:14px; margin-top:12px; max-width:300px; line-height:1.6; }
-        .footer-col h4 { font-size:14px; font-weight:700; margin-bottom:16px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
-        .footer-col a { display:block; color:var(--text-muted); text-decoration:none; font-size:14px; padding:4px 0; transition:color .2s; }
-        .footer-col a:hover { color:var(--primary); }
-        .footer-bottom { max-width:1100px; margin:40px auto 0; padding-top:24px; border-top:1px solid var(--border); text-align:center; font-size:13px; color:var(--text-muted); }
-
-        @media (max-width:768px) {
-            .tools-grid { grid-template-columns:1fr; }
-            .features-grid { grid-template-columns:1fr; }
-            .cities-grid { grid-template-columns:repeat(2,1fr); }
-            .plans-grid { grid-template-columns:1fr; }
-            .footer-inner { grid-template-columns:1fr; }
-            .nav-links .nl { display:none; }
-            .nav-cta { padding:7px 12px; font-size:11px; }
-            .lang-btn { padding:6px 10px; font-size:11px; }
-            .hero h1 { font-size:32px; letter-spacing:-1px; }
-            .hero-desc { font-size:15px; }
-            .hero-buttons { flex-direction:column; align-items:center; }
-            .btn-primary, .btn-secondary { width:100%; justify-content:center; padding:14px 24px; font-size:14px; }
-        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#0B1120;color:#F1F5F9;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+        a{color:#38BDF8;text-decoration:none}
+        input,button{font-family:inherit}
+        ::placeholder{color:#475569}
+        img{display:inline-block;max-width:100%}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes glow{0%,100%{box-shadow:0 4px 24px rgba(56,189,248,.2)}50%{box-shadow:0 4px 40px rgba(56,189,248,.35)}}
+        @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+        .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .container{width:100%;max-width:480px;margin:0 auto;padding:0 20px}
+        .nav{position:sticky;top:0;z-index:50;background:rgba(11,17,32,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(56,189,248,.06)}
+        .nav-inner{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;max-width:480px;margin:0 auto}
+        .nav-brand{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800;letter-spacing:-.3px}
+        .nav-brand span{color:#38BDF8}
+        .nav-brand img{border-radius:8px}
+        .nav-links{display:flex;gap:6px}
+        .nav-links a{padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;color:#94A3B8;background:rgba(255,255,255,.04);transition:all .2s}
+        .nav-links a:active{background:rgba(56,189,248,.12);color:#38BDF8}
+        .hero{padding:48px 0 8px;text-align:center}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:50px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.12);font-size:12px;font-weight:600;color:#38BDF8;margin-bottom:28px}
+        .hero-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
+        .hero-logo{width:100px;height:100px;margin:0 auto 20px;border-radius:24px;animation:float 4s ease-in-out infinite;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+        .hero h1{font-size:30px;font-weight:900;line-height:1.2;letter-spacing:-1px;margin-bottom:14px}
+        .hero h1 span{color:#38BDF8}
+        .hero-sub{color:#94A3B8;font-size:15px;line-height:1.7;max-width:320px;margin:0 auto 32px}
+        .form-card{background:#141B2D;border:1px solid rgba(56,189,248,.08);border-radius:20px;padding:24px 20px;margin-bottom:12px}
+        .form-row{display:flex;gap:8px}
+        .form-row input{flex:1;padding:15px 16px;border-radius:14px;border:1.5px solid #1E293B;background:#0B1120;color:#F1F5F9;font-size:15px;outline:none;transition:border .2s;min-width:0}
+        .form-row input:focus{border-color:#38BDF8}
+        .btn-main{padding:15px 22px;border-radius:14px;border:none;background:linear-gradient(135deg,#38BDF8,#0EA5E9);color:#0B1120;font-size:15px;font-weight:700;cursor:pointer;animation:glow 3s infinite;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:transform .15s}
+        .btn-main:active{transform:scale(.96)}
+        .form-note{color:#475569;font-size:11px;text-align:center;padding:4px 0 0}
+        .form-hidden{display:none!important}
+        .success-msg{padding:24px 20px;border-radius:20px;text-align:center;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.12)}
+        .success-msg .emoji{font-size:36px;display:block;margin-bottom:10px}
+        .success-msg h3{color:#22C55E;font-size:16px;font-weight:700;margin-bottom:4px}
+        .success-msg p{color:#94A3B8;font-size:13px}
+        .cd{padding:36px 0;text-align:center}
+        .cd-label{color:#475569;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:16px}
+        .cd-boxes{display:flex;justify-content:center;gap:10px}
+        .cd-box{width:68px;padding:14px 0;border-radius:14px;background:#141B2D;border:1px solid #1E293B}
+        .cd-num{font-size:24px;font-weight:800;color:#38BDF8;line-height:1}
+        .cd-unit{color:#475569;font-size:9px;font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+        .sec-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;letter-spacing:-.5px}
+        .sec-title span{color:#38BDF8}
+        .sec-sub{color:#64748B;text-align:center;font-size:13px;margin-bottom:28px}
+        .divider{height:1px;max-width:120px;margin:0 auto;background:linear-gradient(90deg,transparent,#1E293B,transparent)}
+        .features{padding:48px 0}
+        .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .feat-card{padding:22px 16px;border-radius:18px;background:#141B2D;border:1px solid #1E293B;transition:border-color .2s}
+        .feat-card:active{border-color:rgba(56,189,248,.2)}
+        .feat-icon{width:44px;height:44px;border-radius:12px;background:rgba(56,189,248,.06);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
+        .feat-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+        .feat-card p{color:#64748B;font-size:11px;line-height:1.5}
+        .cities{padding:36px 0}
+        .city-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+        .city-pill{padding:9px 16px;border-radius:50px;background:#141B2D;border:1px solid #1E293B;font-size:13px;font-weight:600;color:#CBD5E1}
+        .steps-sec{padding:48px 0}
+        .step-list{max-width:360px;margin:0 auto}
+        .step-item{display:flex;gap:14px;margin-bottom:28px;position:relative}
+        .step-dot{width:42px;height:42px;border-radius:12px;flex-shrink:0;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.1);display:flex;align-items:center;justify-content:center;font-size:18px}
+        .step-item h3{font-size:14px;font-weight:700;margin-bottom:2px}
+        .step-item p{color:#64748B;font-size:12px}
+        .step-connector{position:absolute;left:20px;top:46px;width:2px;height:22px;background:#1E293B;border-radius:1px}
+        .plans-sec{padding:36px 0}
+        .plan-list{display:flex;flex-direction:column;gap:10px}
+        .plan-item{display:flex;align-items:center;gap:16px;padding:18px 16px;border-radius:16px;background:#141B2D;border:2px solid #1E293B;position:relative}
+        .plan-item.popular{border-color:#38BDF8}
+        .plan-tag{position:absolute;top:-9px;right:14px;padding:3px 10px;border-radius:20px;background:linear-gradient(135deg,#38BDF8,#0EA5E9);color:#0B1120;font-size:9px;font-weight:800;letter-spacing:.5px}
+        .plan-price{min-width:58px}
+        .plan-amount{font-size:22px;font-weight:800}
+        .plan-period{font-size:10px;color:#475569;font-weight:600}
+        .plan-amount.t1{color:#64748B}.plan-amount.t2{color:#38BDF8}.plan-amount.t3{color:#A78BFA}
+        .plan-detail h3{font-size:15px;font-weight:700;margin-bottom:2px}
+        .plan-detail p{color:#64748B;font-size:11px}
+        .cta-sec{padding:36px 0 48px}
+        .cta-card{padding:36px 24px;border-radius:24px;text-align:center;background:linear-gradient(135deg,rgba(56,189,248,.05),rgba(167,139,250,.05));border:1px solid rgba(56,189,248,.08)}
+        .cta-logo{width:80px;height:80px;border-radius:20px;margin:0 auto 14px;animation:float 4s ease-in-out infinite;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+        .cta-card h2{font-size:22px;font-weight:800;margin-bottom:8px}
+        .cta-card>p{color:#94A3B8;font-size:13px;margin-bottom:24px}
+        .cta-form{max-width:300px;margin:0 auto}
+        .footer{padding:36px 20px 40px;text-align:center;border-top:1px solid #141B2D}
+        .foot-brand{display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:700;margin-bottom:16px}
+        .foot-brand span{color:#38BDF8}
+        .foot-brand img{border-radius:6px}
+        .foot-social{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+        .foot-social a{padding:9px 16px;border-radius:10px;font-size:12px;font-weight:600;color:#94A3B8;background:#141B2D;border:1px solid #1E293B;transition:all .2s}
+        .foot-social a:active{border-color:#38BDF8;color:#38BDF8}
+        .foot-copy{color:#334155;font-size:11px}
+        @media(min-width:640px){.hero h1{font-size:38px}.hero-sub{font-size:16px;max-width:380px}.container{padding:0 32px}}
     </style>
 </head>
 <body>
 
-<div class="bg-grid"></div>
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
+<div class="nav"><div class="nav-inner">
+    <div class="nav-brand"><img src="logo-192.png" width="32" height="32" alt="BackpackRadar"> Backpack<span>Radar</span></div>
+    <div class="nav-links"><a href="https://www.instagram.com/backpackradar" target="_blank">Insta</a><a href="https://www.tiktok.com/@jobsalertpvt" target="_blank">TikTok</a></div>
+</div></div>
 
-<nav>
-    <div class="nav-inner">
-        <a href="/" class="nav-brand"><img src="/logo-192.png" alt="BackpackRadar"><span>Backpack<em>Radar</em></span></a>
-        <div class="nav-links">
-            <a href="#tools" class="nl" data-t="nav_tools">Tools</a>
-            <a href="#cities" class="nl" data-t="nav_cities">Cities</a>
-            <a href="#plans" class="nl" data-t="nav_plans">Plans</a>
-            <a href="/privacy.html" class="nl" data-t="nav_privacy">Privacy</a>
-            <div class="lang-picker">
-                <button class="lang-btn" onclick="toggleLang()"><span id="lang-flag">🇬🇧</span> <span id="lang-label">EN</span></button>
-                <div class="lang-dropdown" id="lang-dropdown">
-                    <button class="lang-option active" onclick="setLang('en')">🇬🇧 English</button>
-                    <button class="lang-option" onclick="setLang('fr')">🇫🇷 Français</button>
-                    <button class="lang-option" onclick="setLang('de')">🇩🇪 Deutsch</button>
-                    <button class="lang-option" onclick="setLang('it')">🇮🇹 Italiano</button>
-                    <button class="lang-option" onclick="setLang('es')">🇪🇸 Español</button>
-                    <button class="lang-option" onclick="setLang('pt')">🇵🇹 Português</button>
-                </div>
-            </div>
-            <a href="#plans" class="nav-cta" data-t="nav_download">Download App</a>
-        </div>
-    </div>
-</nav>
+<div class="container">
 
 <section class="hero">
-    <div class="hero-inner">
-        <div class="hero-badge" data-t="hero_badge">Built for Working Holiday Visa holders</div>
-        <h1 data-t="hero_title">The <span class="hl">all-in-one app</span> for backpackers in <span class="ac">Australia</span></h1>
-        <p class="hero-desc" data-t="hero_desc">Job alerts, 88 Days Tracker, salary calculator, hostel finder, regional postcode checker, currency converter & WHV guide. Everything you need in one app.</p>
-        <div class="hero-buttons">
-            <a href="#" class="btn-primary"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12L3.84 21.85C3.34 21.6 3 21.09 3 20.5ZM16.81 15.12L6.05 21.34L14.54 12.85L16.81 15.12ZM20.16 10.81C20.5 11.08 20.75 11.5 20.75 12C20.75 12.5 20.5 12.92 20.16 13.19L17.89 14.5L15.39 12L17.89 9.5L20.16 10.81ZM6.05 2.66L16.81 8.88L14.54 11.15L6.05 2.66Z"/></svg> Google Play</a>
-            <a href="#" class="btn-secondary"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg> App Store</a>
-        </div>
-    </div>
+    <div class="hero-badge"><div class="hero-dot"></div>Lancement bientôt</div>
+    <img src="logo-512.png" class="hero-logo" alt="BackpackRadar" width="100" height="100">
+    <h1>Ton radar à jobs<br>en <span>Australie</span></h1>
+    <p class="hero-sub">Alertes emploi par IA, outils WHV et communauté backpackers. Tout dans une seule app.</p>
 </section>
 
-<section class="tools" id="tools">
-    <div class="tools-inner">
-        <div class="section-title">
-            <h2 data-t="tools_title">More than just <span style="color:var(--primary)">job alerts</span></h2>
-            <p data-t="tools_desc">A complete toolkit designed for backpackers and WHV holders.</p>
-        </div>
-        <div class="tools-grid">
-            <div class="tool-card"><span class="tool-emoji">💼</span><h3 data-t="t1_title">AI Job Alerts</h3><p data-t="t1_desc">Real-time job notifications filtered by AI from Seek.com.au. Only jobs suitable for WHV holders.</p></div>
-            <div class="tool-card"><span class="tool-emoji">📅</span><h3 data-t="t2_title">88 Days Tracker</h3><p data-t="t2_desc">Track your regional farm work days for your 2nd and 3rd year visa extension.</p></div>
-            <div class="tool-card"><span class="tool-emoji">💰</span><h3 data-t="t3_title">Salary Calculator</h3><p data-t="t3_desc">Calculate your net pay with WHV-specific tax rates.</p></div>
-            <div class="tool-card"><span class="tool-emoji">🗺️</span><h3 data-t="t4_title">Regional Postcode Checker</h3><p data-t="t4_desc">Instantly check if a postcode qualifies as regional for your 88 days.</p></div>
-            <div class="tool-card"><span class="tool-emoji">🏨</span><h3 data-t="t5_title">Hostel Finder</h3><p data-t="t5_desc">Find the cheapest and best-rated hostels in each city.</p></div>
-            <div class="tool-card"><span class="tool-emoji">💱</span><h3 data-t="t6_title">Currency Converter</h3><p data-t="t6_desc">Live exchange rates from AUD to 24 currencies.</p></div>
-            <div class="tool-card"><span class="tool-emoji">📖</span><h3 data-t="t7_title">WHV Guide</h3><p data-t="t7_desc">Complete guide: TFN, bank, accommodation, rights, taxes, insurance & tips.</p></div>
-            <div class="tool-card"><span class="tool-emoji">🔗</span><h3 data-t="t8_title">Useful Links</h3><p data-t="t8_desc">All essential websites: myGov, ATO, Fair Work, banks, jobs & transport.</p></div>
-            <div class="tool-card"><span class="tool-emoji">🌤️</span><h3 data-t="t9_title">Live Weather</h3><p data-t="t9_desc">Current weather displayed on each city widget.</p></div>
-        </div>
-    </div>
-</section>
+<div id="formWrap"><div class="form-card"><form id="mainForm" action="https://formspree.io/f/mkopjnyz" method="POST"><div class="form-row"><input type="email" name="email" placeholder="Ton email" required autocomplete="email"><button type="submit" class="btn-main">Rejoindre 🚀</button></div></form><p class="form-note">Gratuit · Pas de spam · On te prévient au lancement</p></div></div>
+<div id="successWrap" class="form-hidden"><div class="success-msg"><span class="emoji">🎉</span><h3>T'es sur la liste !</h3><p>On te prévient dès que l'app est dispo. Welcome mate 🤙</p></div></div>
 
-<section class="features">
-    <div class="features-inner">
-        <div class="section-title">
-            <h2 data-t="feat_title">Built for <span style="color:var(--accent)">your journey</span></h2>
-            <p data-t="feat_desc">Every feature designed with backpackers in mind.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card"><h3>🤖 <span data-t="f1_title">AI-Powered Filtering</span></h3><p data-t="f1_desc">Our AI analyzes every job listing and only shows positions that WHV holders can apply for.</p></div>
-            <div class="feature-card"><h3>🌏 <span data-t="f2_title">6 Languages</span></h3><p data-t="f2_desc">Available in English, French, German, Italian, Spanish and Portuguese.</p></div>
-            <div class="feature-card"><h3>📊 <span data-t="f3_title">Personal Dashboard</span></h3><p data-t="f3_desc">Your hub: weather, job stats, saved jobs, 88 days progress at a glance.</p></div>
-            <div class="feature-card"><h3>🔍 <span data-t="f4_title">Smart Search</span></h3><p data-t="f4_desc">Search jobs by title, company, city or contract type.</p></div>
-        </div>
-    </div>
-</section>
+<section class="cd reveal"><div class="cd-label">Lancement dans</div><div class="cd-boxes"><div class="cd-box"><div class="cd-num" id="cD">--</div><div class="cd-unit">jours</div></div><div class="cd-box"><div class="cd-num" id="cH">--</div><div class="cd-unit">heures</div></div><div class="cd-box"><div class="cd-num" id="cM">--</div><div class="cd-unit">min</div></div><div class="cd-box"><div class="cd-num" id="cS">--</div><div class="cd-unit">sec</div></div></div></section>
 
-<section class="cities" id="cities">
-    <div class="cities-inner">
-        <div class="section-title">
-            <h2 data-t="cities_title">Available in <span style="color:var(--accent)">5 cities</span></h2>
-            <p data-t="cities_desc">The most popular destinations for backpackers in Australia.</p>
-        </div>
-        <div class="cities-grid">
-            <div class="city-card"><span class="city-emoji">🏙️</span><div class="city-name">Sydney</div><div class="city-sub">NSW</div></div>
-            <div class="city-card"><span class="city-emoji">🌴</span><div class="city-name">Brisbane</div><div class="city-sub">QLD</div></div>
-            <div class="city-card"><span class="city-emoji">🏖️</span><div class="city-name">Perth</div><div class="city-sub">WA</div></div>
-            <div class="city-card"><span class="city-emoji">🍷</span><div class="city-name">Adelaide</div><div class="city-sub">SA</div></div>
-            <div class="city-card"><span class="city-emoji">🐊</span><div class="city-name">Cairns</div><div class="city-sub">QLD</div></div>
-        </div>
-    </div>
-</section>
+<div class="divider"></div>
 
-<section class="plans" id="plans">
-    <div class="plans-inner">
-        <div class="section-title">
-            <h2 data-t="plans_title">Simple, fair <span style="color:var(--primary)">pricing</span></h2>
-            <p data-t="plans_desc">Start free. Upgrade when you're ready.</p>
-        </div>
-        <div class="plans-grid">
-            <div class="plan-card">
-                <div class="plan-price">Free</div>
-                <div class="plan-name">Starter</div>
-                <ul class="plan-features">
-                    <li data-t="pf1">1 city, 1 alert/day</li>
-                    <li data-t="pf2">WHV Guide & Tips</li>
-                    <li data-t="pf3">88 Days Tracker</li>
-                    <li data-t="pf4">Salary Calculator</li>
-                    <li data-t="pf5">Currency Converter</li>
-                    <li data-t="pf6">Hostel Finder & Links</li>
-                    <li data-t="pf7">Regional Postcode Checker</li>
-                    <li class="no" data-t="pf8">Dashboard & Search</li>
-                    <li class="no" data-t="pf9">Unlimited alerts</li>
-                </ul>
-                <button class="plan-btn plan-btn-s" data-t="plan_start">Get Started</button>
-            </div>
-            <div class="plan-card pop">
-                <div class="plan-badge" data-t="most_popular">⭐ Most Popular</div>
-                <div class="plan-price">$7<span class="plan-period">/mo</span></div>
-                <div class="plan-name">City Plan</div>
-                <ul class="plan-features">
-                    <li data-t="pc1">1 city of your choice</li>
-                    <li data-t="pc2">Unlimited alerts</li>
-                    <li data-t="pc3">All Free features included</li>
-                    <li data-t="pc4">Personal Dashboard</li>
-                    <li data-t="pc5">Job Search by keyword</li>
-                    <li data-t="pc6">Live Weather</li>
-                </ul>
-                <button class="plan-btn plan-btn-p" data-t="plan_choose">Choose Plan</button>
-            </div>
-            <div class="plan-card">
-                <div class="plan-price">$19<span class="plan-period">/mo</span></div>
-                <div class="plan-name">All Cities</div>
-                <ul class="plan-features">
-                    <li data-t="pa1">All 5 cities</li>
-                    <li data-t="pa2">Unlimited alerts</li>
-                    <li data-t="pa3">Everything in City Plan</li>
-                    <li data-t="pa4">Switch cities anytime</li>
-                </ul>
-                <button class="plan-btn plan-btn-s" data-t="plan_choose">Choose Plan</button>
-            </div>
-        </div>
-    </div>
-</section>
+<section class="features reveal"><h2 class="sec-title">Tout pour ton <span>WHV</span></h2><p class="sec-sub">Une seule app, zéro prise de tête</p><div class="feat-grid">
+<div class="feat-card"><div class="feat-icon">📡</div><h3>Alertes emploi IA</h3><p>Jobs filtrés pour ton visa, ta ville, tes préférences</p></div>
+<div class="feat-card"><div class="feat-icon">💵</div><h3>Calculateur salaire</h3><p>Brut → net, impôts WHV, super, conversion €</p></div>
+<div class="feat-card"><div class="feat-icon">🌾</div><h3>Tracker 88 jours</h3><p>Comptage avec les vraies règles WHV</p></div>
+<div class="feat-card"><div class="feat-icon">👥</div><h3>Communauté</h3><p>Jobs, logement, tips, sorties par ville</p></div>
+<div class="feat-card"><div class="feat-icon">⏳</div><h3>Countdown visa</h3><p>Compte à rebours + rappels auto</p></div>
+<div class="feat-card"><div class="feat-icon">💰</div><h3>Budget tracker</h3><p>Dépenses + conversion euros live</p></div>
+</div></section>
 
-<footer>
-    <div class="footer-inner">
-        <div class="footer-brand">
-            <a href="/" class="nav-brand"><img src="/logo-192.png" alt="BackpackRadar"><span>Backpack<em>Radar</em></span></a>
-            <p data-t="footer_desc">The all-in-one app for backpackers in Australia. Job alerts, 88 Days Tracker, salary calculator, hostel finder, WHV guide & more.</p>
-        </div>
-        <div class="footer-col">
-            <h4 data-t="footer_product">Product</h4>
-            <a href="#tools" data-t="nav_tools">Tools</a>
-            <a href="#cities" data-t="nav_cities">Cities</a>
-            <a href="#plans" data-t="nav_plans">Plans</a>
-        </div>
-        <div class="footer-col">
-            <h4 data-t="footer_legal">Legal</h4>
-            <a href="/privacy.html" data-t="nav_privacy">Privacy Policy</a>
-            <a href="/terms.html" data-t="footer_terms">Terms of Service</a>
-            <a href="mailto:support@backpackradar.app">Contact</a>
-        </div>
-    </div>
-    <div class="footer-bottom">&copy; 2026 BackpackRadar. All rights reserved.</div>
+<div class="divider"></div>
+
+<section class="cities reveal"><h2 class="sec-title">10 villes 🇦🇺</h2><p class="sec-sub">Alertes et communauté dans chaque ville</p><div class="city-grid">
+<span class="city-pill">🏙️ Sydney</span><span class="city-pill">☕ Melbourne</span><span class="city-pill">🌴 Brisbane</span><span class="city-pill">🌅 Perth</span><span class="city-pill">🍷 Adelaide</span><span class="city-pill">🐊 Cairns</span><span class="city-pill">🏄 Gold Coast</span><span class="city-pill">🦎 Darwin</span><span class="city-pill">⛰️ Hobart</span><span class="city-pill">🏛️ Canberra</span>
+</div></section>
+
+<div class="divider"></div>
+
+<section class="steps-sec reveal"><h2 class="sec-title">Comment ça marche</h2><p class="sec-sub">4 étapes et t'es lancé</p><div class="step-list">
+<div class="step-item"><div class="step-dot">📱</div><div><h3>Télécharge l'app</h3><p>Crée ton compte en 30 secondes</p></div><div class="step-connector"></div></div>
+<div class="step-item"><div class="step-dot">🎯</div><div><h3>Configure tes préférences</h3><p>Ville, secteurs, type de contrat</p></div><div class="step-connector"></div></div>
+<div class="step-item"><div class="step-dot">📡</div><div><h3>Reçois tes alertes</h3><p>Jobs filtrés par IA pour ton WHV</p></div><div class="step-connector"></div></div>
+<div class="step-item"><div class="step-dot">🤙</div><div><h3>Postule et profite</h3><p>Lien direct vers l'offre</p></div></div>
+</div></section>
+
+<div class="divider"></div>
+
+<section class="plans-sec reveal"><h2 class="sec-title">3 plans simples</h2><p class="sec-sub">Commence gratuitement</p><div class="plan-list">
+<div class="plan-item"><div class="plan-price"><div class="plan-amount t1">0$</div></div><div class="plan-detail"><h3>Free</h3><p>1 ville · 3 alertes/jour · Tous les outils</p></div></div>
+<div class="plan-item popular"><div class="plan-tag">POPULAIRE</div><div class="plan-price"><div class="plan-amount t2">7$</div><div class="plan-period">/mois</div></div><div class="plan-detail"><h3>City</h3><p>Alertes illimitées · Push · Tous les filtres</p></div></div>
+<div class="plan-item"><div class="plan-price"><div class="plan-amount t3">19$</div><div class="plan-period">/mois</div></div><div class="plan-detail"><h3>All Cities</h3><p>10 villes · Alertes prioritaires · Export</p></div></div>
+</div></section>
+
+<section class="cta-sec reveal"><div class="cta-card">
+    <img src="logo-512.png" class="cta-logo" alt="BackpackRadar" width="80" height="80">
+    <h2>Rejoins la meute</h2>
+    <p>Sois parmi les premiers à tester BackpackRadar</p>
+    <div class="cta-form"><form id="ctaForm" action="https://formspree.io/f/mkopjnyz" method="POST"><div class="form-row"><input type="email" name="email" placeholder="Ton email" required autocomplete="email"><button type="submit" class="btn-main">Go 🚀</button></div></form></div>
+</div></section>
+
+</div>
+
+<footer class="footer">
+    <div class="foot-brand"><img src="logo-192.png" width="24" height="24" alt="BackpackRadar"> Backpack<span>Radar</span></div>
+    <div class="foot-social"><a href="https://www.instagram.com/backpackradar" target="_blank">📸 Instagram</a><a href="https://www.tiktok.com/@jobsalertpvt" target="_blank">🎵 TikTok</a></div>
+    <p class="foot-copy">© 2026 BackpackRadar · Ton radar à jobs en Australie</p>
 </footer>
 
 <script>
-const T={en:{nav_tools:"Tools",nav_cities:"Cities",nav_plans:"Plans",nav_privacy:"Privacy",nav_download:"Download App",hero_badge:"Built for Working Holiday Visa holders",hero_title:'The <span class="hl">all-in-one app</span> for backpackers in <span class="ac">Australia</span>',hero_desc:"Job alerts, 88 Days Tracker, salary calculator, hostel finder, regional postcode checker, currency converter & WHV guide. Everything you need in one app.",tools_title:'More than just <span style="color:var(--primary)">job alerts</span>',tools_desc:"A complete toolkit designed for backpackers and WHV holders.",t1_title:"AI Job Alerts",t1_desc:"Real-time job notifications filtered by AI from Seek.com.au. Only jobs suitable for WHV holders.",t2_title:"88 Days Tracker",t2_desc:"Track your regional farm work days for your 2nd and 3rd year visa extension.",t3_title:"Salary Calculator",t3_desc:"Calculate your net pay with WHV-specific tax rates.",t4_title:"Regional Postcode Checker",t4_desc:"Instantly check if a postcode qualifies as regional for your 88 days.",t5_title:"Hostel Finder",t5_desc:"Find the cheapest and best-rated hostels in each city.",t6_title:"Currency Converter",t6_desc:"Live exchange rates from AUD to 24 currencies.",t7_title:"WHV Guide",t7_desc:"Complete guide: TFN, bank, accommodation, rights, taxes, insurance & tips.",t8_title:"Useful Links",t8_desc:"All essential websites: myGov, ATO, Fair Work, banks, jobs & transport.",t9_title:"Live Weather",t9_desc:"Current weather displayed on each city widget.",feat_title:'Built for <span style="color:var(--accent)">your journey</span>',feat_desc:"Every feature designed with backpackers in mind.",f1_title:"AI-Powered Filtering",f1_desc:"Our AI analyzes every job listing and only shows positions that WHV holders can apply for.",f2_title:"6 Languages",f2_desc:"Available in English, French, German, Italian, Spanish and Portuguese.",f3_title:"Personal Dashboard",f3_desc:"Your hub: weather, job stats, saved jobs, 88 days progress at a glance.",f4_title:"Smart Search",f4_desc:"Search jobs by title, company, city or contract type.",cities_title:'Available in <span style="color:var(--accent)">5 cities</span>',cities_desc:"The most popular destinations for backpackers in Australia.",plans_title:'Simple, fair <span style="color:var(--primary)">pricing</span>',plans_desc:"Start free. Upgrade when you're ready.",pf1:"1 city, 1 alert/day",pf2:"WHV Guide & Tips",pf3:"88 Days Tracker",pf4:"Salary Calculator",pf5:"Currency Converter",pf6:"Hostel Finder & Links",pf7:"Regional Postcode Checker",pf8:"Dashboard & Search",pf9:"Unlimited alerts",pc1:"1 city of your choice",pc2:"Unlimited alerts",pc3:"All Free features included",pc4:"Personal Dashboard",pc5:"Job Search by keyword",pc6:"Live Weather",pa1:"All 5 cities",pa2:"Unlimited alerts",pa3:"Everything in City Plan",pa4:"Switch cities anytime",plan_start:"Get Started",plan_choose:"Choose Plan",most_popular:"⭐ Most Popular",footer_desc:"The all-in-one app for backpackers in Australia.",footer_product:"Product",footer_legal:"Legal",footer_terms:"Terms of Service"},
-fr:{nav_tools:"Outils",nav_cities:"Villes",nav_plans:"Forfaits",nav_privacy:"Confidentialité",nav_download:"Télécharger",hero_badge:"Conçu pour les détenteurs de PVT / WHV",hero_title:'L\'app <span class="hl">tout-en-un</span> pour les backpackers en <span class="ac">Australie</span>',hero_desc:"Alertes d'emploi, compteur 88 jours, calculateur de salaire, auberges, vérificateur de zone, convertisseur et guide PVT. Tout en une app.",tools_title:'Bien plus que des <span style="color:var(--primary)">alertes d\'emploi</span>',tools_desc:"Une boîte à outils complète pour les backpackers.",t1_title:"Alertes IA",t1_desc:"Notifications d'emploi filtrées par IA depuis Seek.com.au.",t2_title:"Compteur 88 jours",t2_desc:"Suivez vos jours de travail régional pour l'extension de visa.",t3_title:"Calculateur de salaire",t3_desc:"Calculez votre salaire net avec les taux WHV.",t4_title:"Vérificateur zone régionale",t4_desc:"Vérifiez si un postcode est en zone régionale.",t5_title:"Auberges",t5_desc:"Les auberges les moins chères et mieux notées par ville.",t6_title:"Convertisseur de devises",t6_desc:"Taux de change en direct de AUD vers 24 devises.",t7_title:"Guide PVT",t7_desc:"Guide complet : TFN, banque, logement, droits, impôts et conseils.",t8_title:"Liens utiles",t8_desc:"Tous les sites essentiels pour les backpackers.",t9_title:"Météo en direct",t9_desc:"Météo actuelle sur chaque widget de ville.",feat_title:'Conçu pour <span style="color:var(--accent)">votre aventure</span>',feat_desc:"Chaque fonctionnalité pensée pour les backpackers.",f1_title:"Filtrage par IA",f1_desc:"Notre IA ne montre que les postes pour les PVT.",f2_title:"6 langues",f2_desc:"Disponible en anglais, français, allemand, italien, espagnol et portugais.",f3_title:"Dashboard personnel",f3_desc:"Votre hub : météo, stats, jobs sauvegardés et progression 88 jours.",f4_title:"Recherche intelligente",f4_desc:"Cherchez par titre, entreprise, ville ou type de contrat.",cities_title:'Disponible dans <span style="color:var(--accent)">5 villes</span>',cities_desc:"Les destinations les plus populaires pour les backpackers.",plans_title:'Des tarifs <span style="color:var(--primary)">simples et justes</span>',plans_desc:"Commencez gratuitement.",pf1:"1 ville, 1 alerte/jour",pf2:"Guide PVT & Conseils",pf3:"Compteur 88 jours",pf4:"Calculateur de salaire",pf5:"Convertisseur de devises",pf6:"Auberges & Liens",pf7:"Vérificateur zone régionale",pf8:"Dashboard & Recherche",pf9:"Alertes illimitées",pc1:"1 ville au choix",pc2:"Alertes illimitées",pc3:"Toutes les features Free",pc4:"Dashboard personnel",pc5:"Recherche par mot-clé",pc6:"Météo en direct",pa1:"Les 5 villes",pa2:"Alertes illimitées",pa3:"Tout le City Plan",pa4:"Changez de ville quand vous voulez",plan_start:"Commencer",plan_choose:"Choisir",most_popular:"⭐ Le plus populaire",footer_desc:"L'app tout-en-un pour les backpackers en Australie.",footer_product:"Produit",footer_legal:"Légal",footer_terms:"Conditions d'utilisation"},
-de:{nav_tools:"Tools",nav_cities:"Städte",nav_plans:"Pläne",nav_privacy:"Datenschutz",nav_download:"Herunterladen",hero_badge:"Für Working Holiday Visa Inhaber",hero_title:'Die <span class="hl">All-in-One App</span> für Backpacker in <span class="ac">Australien</span>',hero_desc:"Job-Alerts, 88 Tage Tracker, Gehaltsrechner, Hostels, PLZ-Check, Währungsrechner & WHV Guide. Alles in einer App.",tools_title:'Mehr als nur <span style="color:var(--primary)">Job-Alerts</span>',tools_desc:"Ein komplettes Toolkit für Backpacker.",t1_title:"KI Job-Alerts",t1_desc:"Echtzeit-Jobbenachrichtigungen KI-gefiltert von Seek.com.au.",t2_title:"88 Tage Tracker",t2_desc:"Verfolge deine regionalen Farmarbeitstage.",t3_title:"Gehaltsrechner",t3_desc:"Berechne dein Nettogehalt mit WHV-Steuersätzen.",t4_title:"Regionaler PLZ-Check",t4_desc:"Prüfe ob eine Postleitzahl regional ist.",t5_title:"Hostels",t5_desc:"Die günstigsten Hostels pro Stadt.",t6_title:"Währungsrechner",t6_desc:"Live-Wechselkurse von AUD zu 24 Währungen.",t7_title:"WHV Guide",t7_desc:"Kompletter Guide: TFN, Bank, Unterkunft, Rechte & Tipps.",t8_title:"Nützliche Links",t8_desc:"Alle wichtigen Websites für Backpacker.",t9_title:"Live Wetter",t9_desc:"Aktuelles Wetter auf jedem Stadt-Widget.",feat_title:'Gebaut für <span style="color:var(--accent)">deine Reise</span>',feat_desc:"Jedes Feature für Backpacker.",f1_title:"KI-Filterung",f1_desc:"Nur Jobs für WHV-Inhaber.",f2_title:"6 Sprachen",f2_desc:"Englisch, Französisch, Deutsch, Italienisch, Spanisch, Portugiesisch.",f3_title:"Dashboard",f3_desc:"Wetter, Stats, Jobs, 88 Tage Fortschritt.",f4_title:"Intelligente Suche",f4_desc:"Suche nach Titel, Firma oder Stadt.",cities_title:'In <span style="color:var(--accent)">5 Städten</span>',cities_desc:"Die beliebtesten Backpacker-Ziele.",plans_title:'Faire <span style="color:var(--primary)">Preise</span>',plans_desc:"Starte kostenlos.",pf1:"1 Stadt, 1 Alert/Tag",pf2:"WHV Guide & Tipps",pf3:"88 Tage Tracker",pf4:"Gehaltsrechner",pf5:"Währungsrechner",pf6:"Hostels & Links",pf7:"Regionaler PLZ-Check",pf8:"Dashboard & Suche",pf9:"Unbegrenzte Alerts",pc1:"1 Stadt deiner Wahl",pc2:"Unbegrenzte Alerts",pc3:"Alle Free-Features",pc4:"Dashboard",pc5:"Jobsuche",pc6:"Live Wetter",pa1:"Alle 5 Städte",pa2:"Unbegrenzte Alerts",pa3:"Alles im City Plan",pa4:"Jederzeit wechseln",plan_start:"Loslegen",plan_choose:"Auswählen",most_popular:"⭐ Am beliebtesten",footer_desc:"Die All-in-One App für Backpacker.",footer_product:"Produkt",footer_legal:"Rechtliches",footer_terms:"Nutzungsbedingungen"},
-it:{nav_tools:"Strumenti",nav_cities:"Città",nav_plans:"Piani",nav_privacy:"Privacy",nav_download:"Scarica",hero_badge:"Per i titolari di WHV",hero_title:'L\'app <span class="hl">tutto-in-uno</span> per backpacker in <span class="ac">Australia</span>',hero_desc:"Avvisi lavoro, contatore 88 giorni, calcolo stipendio, ostelli, verifica zona, convertitore e guida WHV.",tools_title:'Più di <span style="color:var(--primary)">avvisi lavoro</span>',tools_desc:"Un toolkit completo per backpacker.",t1_title:"Avvisi IA",t1_desc:"Notifiche lavoro filtrate dall'IA da Seek.com.au.",t2_title:"Contatore 88 giorni",t2_desc:"Monitora i tuoi giorni di farm work.",t3_title:"Calcolo stipendio",t3_desc:"Stipendio netto con aliquote WHV.",t4_title:"Verifica zona",t4_desc:"Verifica se un postcode è regionale.",t5_title:"Ostelli",t5_desc:"Ostelli più economici per città.",t6_title:"Convertitore",t6_desc:"Tassi in tempo reale da AUD.",t7_title:"Guida WHV",t7_desc:"Guida completa per backpacker.",t8_title:"Link utili",t8_desc:"Siti essenziali per backpacker.",t9_title:"Meteo",t9_desc:"Meteo su ogni widget città.",feat_title:'Per <span style="color:var(--accent)">il tuo viaggio</span>',feat_desc:"Ogni funzione per backpacker.",f1_title:"Filtro IA",f1_desc:"Solo lavori per WHV.",f2_title:"6 lingue",f2_desc:"6 lingue disponibili.",f3_title:"Dashboard",f3_desc:"Il tuo hub personale.",f4_title:"Ricerca",f4_desc:"Cerca per titolo o città.",cities_title:'In <span style="color:var(--accent)">5 città</span>',cities_desc:"Destinazioni più popolari.",plans_title:'Prezzi <span style="color:var(--primary)">giusti</span>',plans_desc:"Inizia gratis.",pf1:"1 città, 1 avviso/giorno",pf2:"Guida WHV",pf3:"Contatore 88 giorni",pf4:"Calcolo stipendio",pf5:"Convertitore",pf6:"Ostelli & Link",pf7:"Verifica zona",pf8:"Dashboard & Ricerca",pf9:"Avvisi illimitati",pc1:"1 città a scelta",pc2:"Avvisi illimitati",pc3:"Tutte le feature Free",pc4:"Dashboard",pc5:"Ricerca",pc6:"Meteo",pa1:"Tutte le 5 città",pa2:"Avvisi illimitati",pa3:"Tutto nel City Plan",pa4:"Cambia quando vuoi",plan_start:"Inizia",plan_choose:"Scegli",most_popular:"⭐ Più popolare",footer_desc:"App tutto-in-uno per backpacker.",footer_product:"Prodotto",footer_legal:"Legale",footer_terms:"Termini"},
-es:{nav_tools:"Herramientas",nav_cities:"Ciudades",nav_plans:"Planes",nav_privacy:"Privacidad",nav_download:"Descargar",hero_badge:"Para titulares de WHV",hero_title:'La app <span class="hl">todo-en-uno</span> para mochileros en <span class="ac">Australia</span>',hero_desc:"Alertas de empleo, contador 88 días, calculadora, hostales, verificador de zona, conversor y guía WHV.",tools_title:'Más que <span style="color:var(--primary)">alertas</span>',tools_desc:"Kit completo para mochileros.",t1_title:"Alertas IA",t1_desc:"Notificaciones filtradas por IA desde Seek.com.au.",t2_title:"Contador 88 días",t2_desc:"Sigue tus días de trabajo regional.",t3_title:"Calculadora",t3_desc:"Salario neto con tasas WHV.",t4_title:"Verificador zona",t4_desc:"Verifica si un código postal es regional.",t5_title:"Hostales",t5_desc:"Hostales más baratos por ciudad.",t6_title:"Conversor",t6_desc:"Tasas en vivo de AUD.",t7_title:"Guía WHV",t7_desc:"Guía completa para mochileros.",t8_title:"Enlaces",t8_desc:"Sitios esenciales para mochileros.",t9_title:"Clima",t9_desc:"Clima en cada widget de ciudad.",feat_title:'Para <span style="color:var(--accent)">tu aventura</span>',feat_desc:"Cada función para mochileros.",f1_title:"Filtrado IA",f1_desc:"Solo empleos para WHV.",f2_title:"6 idiomas",f2_desc:"6 idiomas disponibles.",f3_title:"Dashboard",f3_desc:"Tu hub personal.",f4_title:"Búsqueda",f4_desc:"Busca por título o ciudad.",cities_title:'En <span style="color:var(--accent)">5 ciudades</span>',cities_desc:"Destinos más populares.",plans_title:'Precios <span style="color:var(--primary)">justos</span>',plans_desc:"Empieza gratis.",pf1:"1 ciudad, 1 alerta/día",pf2:"Guía WHV",pf3:"Contador 88 días",pf4:"Calculadora",pf5:"Conversor",pf6:"Hostales & Enlaces",pf7:"Verificador zona",pf8:"Dashboard & Búsqueda",pf9:"Alertas ilimitadas",pc1:"1 ciudad a elección",pc2:"Alertas ilimitadas",pc3:"Todas las features Free",pc4:"Dashboard",pc5:"Búsqueda",pc6:"Clima",pa1:"Las 5 ciudades",pa2:"Alertas ilimitadas",pa3:"Todo en City Plan",pa4:"Cambia cuando quieras",plan_start:"Empezar",plan_choose:"Elegir",most_popular:"⭐ Más popular",footer_desc:"App todo-en-uno para mochileros.",footer_product:"Producto",footer_legal:"Legal",footer_terms:"Términos"},
-pt:{nav_tools:"Ferramentas",nav_cities:"Cidades",nav_plans:"Planos",nav_privacy:"Privacidade",nav_download:"Descarregar",hero_badge:"Para titulares de WHV",hero_title:'A app <span class="hl">tudo-em-um</span> para mochileiros na <span class="ac">Austrália</span>',hero_desc:"Alertas de emprego, contador 88 dias, calculadora, albergues, verificador de zona, conversor e guia WHV.",tools_title:'Mais do que <span style="color:var(--primary)">alertas</span>',tools_desc:"Kit completo para mochileiros.",t1_title:"Alertas IA",t1_desc:"Notificações filtradas por IA do Seek.com.au.",t2_title:"Contador 88 dias",t2_desc:"Acompanhe os seus dias de trabalho regional.",t3_title:"Calculadora",t3_desc:"Salário líquido com taxas WHV.",t4_title:"Verificador zona",t4_desc:"Verifique se um postcode é regional.",t5_title:"Albergues",t5_desc:"Albergues mais baratos por cidade.",t6_title:"Conversor",t6_desc:"Taxas em tempo real de AUD.",t7_title:"Guia WHV",t7_desc:"Guia completo para mochileiros.",t8_title:"Links úteis",t8_desc:"Sites essenciais para mochileiros.",t9_title:"Meteorologia",t9_desc:"Meteorologia em cada widget.",feat_title:'Para <span style="color:var(--accent)">a sua viagem</span>',feat_desc:"Cada função para mochileiros.",f1_title:"Filtro IA",f1_desc:"Apenas empregos para WHV.",f2_title:"6 idiomas",f2_desc:"6 idiomas disponíveis.",f3_title:"Dashboard",f3_desc:"O seu hub pessoal.",f4_title:"Pesquisa",f4_desc:"Pesquise por título ou cidade.",cities_title:'Em <span style="color:var(--accent)">5 cidades</span>',cities_desc:"Destinos mais populares.",plans_title:'Preços <span style="color:var(--primary)">justos</span>',plans_desc:"Comece grátis.",pf1:"1 cidade, 1 alerta/dia",pf2:"Guia WHV",pf3:"Contador 88 dias",pf4:"Calculadora",pf5:"Conversor",pf6:"Albergues & Links",pf7:"Verificador zona",pf8:"Dashboard & Pesquisa",pf9:"Alertas ilimitados",pc1:"1 cidade à escolha",pc2:"Alertas ilimitados",pc3:"Todas as features Free",pc4:"Dashboard",pc5:"Pesquisa",pc6:"Meteorologia",pa1:"Todas as 5 cidades",pa2:"Alertas ilimitados",pa3:"Tudo no City Plan",pa4:"Mude quando quiser",plan_start:"Começar",plan_choose:"Escolher",most_popular:"⭐ Mais popular",footer_desc:"App tudo-em-um para mochileiros.",footer_product:"Produto",footer_legal:"Legal",footer_terms:"Termos"}
-};
-const flags={en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪",it:"🇮🇹",es:"🇪🇸",pt:"🇵🇹"};
-const labels={en:"EN",fr:"FR",de:"DE",it:"IT",es:"ES",pt:"PT"};
-let currentLang=localStorage.getItem("br-site-lang")||"en";
-function toggleLang(){document.getElementById("lang-dropdown").classList.toggle("open")}
-function setLang(l){
-    currentLang=l;
-    localStorage.setItem("br-site-lang",l);
-    document.getElementById("lang-flag").textContent=flags[l];
-    document.getElementById("lang-label").textContent=labels[l];
-    document.getElementById("lang-dropdown").classList.remove("open");
-    document.querySelectorAll(".lang-option").forEach(function(o){o.classList.remove("active");if(o.textContent.includes(labels[l]))o.classList.add("active")});
-    document.querySelectorAll("[data-t]").forEach(function(el){var k=el.getAttribute("data-t");if(T[l]&&T[l][k])el.innerHTML=T[l][k]});
-}
-document.addEventListener("DOMContentLoaded",function(){setLang(currentLang)});
-document.addEventListener("click",function(e){if(!e.target.closest(".lang-picker"))document.getElementById("lang-dropdown").classList.remove("open")});
+var L=new Date('2026-08-01T00:00:00').getTime();function tick(){var d=L-Date.now();if(d<=0)return;document.getElementById('cD').textContent=Math.floor(d/864e5);document.getElementById('cH').textContent=Math.floor((d%864e5)/36e5);document.getElementById('cM').textContent=Math.floor((d%36e5)/6e4);document.getElementById('cS').textContent=Math.floor((d%6e4)/1e3)}tick();setInterval(tick,1e3);
+function bindForm(f){f.addEventListener('submit',function(e){e.preventDefault();fetch(f.action,{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}}).then(function(r){if(r.ok){document.getElementById('formWrap').classList.add('form-hidden');document.getElementById('successWrap').classList.remove('form-hidden');var c=document.getElementById('ctaForm');if(c)c.innerHTML='<p style="color:#22C55E;font-weight:700;font-size:14px">✅ Déjà inscrit !</p>'}}).catch(function(){alert('Erreur réseau, réessaie !')})})}
+bindForm(document.getElementById('mainForm'));bindForm(document.getElementById('ctaForm'));
+var els=document.querySelectorAll('.reveal');var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});els.forEach(function(el){obs.observe(el)});
 </script>
-
 </body>
 </html>
