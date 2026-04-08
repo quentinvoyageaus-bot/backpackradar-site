@@ -9,462 +9,171 @@
     <meta property="og:description" content="Bot Telegram qui scanne et filtre les offres d'emploi pour les backpackers en WHV/PVT. 5 villes, 100+ offres/jour.">
     <meta property="og:image" content="/logo-512.png">
     <meta property="og:url" content="https://backpackradar.app">
-    <meta name="theme-color" content="#0369a1">
+    <meta name="theme-color" content="#0ea5e9">
     <link rel="icon" type="image/png" href="/logo-192.png">
     <link rel="apple-touch-icon" href="/logo-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#fafbfe;--bg2:#fff;--surface:#fff;--surface-alt:#f1f5f9;
+            --border:#e2e8f0;--border-light:#f1f5f9;
+            --text:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;
+            --primary:#0ea5e9;--primary-dark:#0284c7;--primary-light:#e0f2fe;
+            --primary-glow:rgba(14,165,233,.12);
+            --accent:#f59e0b;--accent-light:#fef3c7;
+            --green:#10b981;--green-light:#d1fae5;
+            --radius:16px;--radius-sm:10px;
+            --shadow-sm:0 1px 3px rgba(15,23,42,.04);
+            --shadow:0 4px 20px rgba(15,23,42,.06);
+            --shadow-lg:0 12px 40px rgba(15,23,42,.08)
+        }
+        html{scroll-behavior:smooth}
+        body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-        :root {
-            --bg: #f0f9ff;
-            --bg2: #ffffff;
-            --surface: #ffffff;
-            --surface-alt: #e0f2fe;
-            --border: #bae6fd;
-            --border-light: #e0f2fe;
-            --text: #0c2d48;
-            --text-secondary: #1e5f8a;
-            --text-muted: #5b92b8;
-            --primary: #0369a1;
-            --primary-dark: #075985;
-            --primary-bright: #0ea5e9;
-            --primary-light: #e0f2fe;
-            --primary-glow: rgba(3,105,161,0.15);
-            --accent: #f59e0b;
-            --accent-dark: #d97706;
-            --accent-light: #fef3c7;
-            --green: #059669;
-            --green-light: #d1fae5;
-            --coral: #f43f5e;
-            --coral-light: #ffe4e6;
-            --sand: #fefce8;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow-sm: 0 1px 3px rgba(3,105,161,0.06);
-            --shadow: 0 4px 20px rgba(3,105,161,0.08);
-            --shadow-lg: 0 12px 40px rgba(3,105,161,0.1);
-        }
+        /* NAV */
+        nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-light)}
+        .nav-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+        .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+        .nav-brand img{width:34px;height:34px;border-radius:10px}
+        .nav-brand span{font-weight:700;font-size:17px;letter-spacing:-.3px}
+        .nav-brand em{font-style:normal;color:var(--primary)}
+        .nav-right{display:flex;align-items:center;gap:6px}
+        .nl{color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;padding:6px 12px;border-radius:8px;transition:all .2s}
+        .nl:hover{color:var(--primary);background:var(--primary-light)}
+        .lang-toggle{display:flex;background:var(--surface-alt);border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-left:4px}
+        .lang-toggle button{padding:6px 11px;border:none;background:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text-muted);transition:all .2s}
+        .lang-toggle button.active{background:var(--primary);color:#fff}
+        .nav-cta{background:var(--primary);color:#fff;padding:9px 18px;border-radius:var(--radius-sm);font-weight:600;font-size:13px;text-decoration:none;transition:all .2s;box-shadow:0 2px 8px rgba(14,165,233,.25);margin-left:4px;white-space:nowrap}
+        .nav-cta:hover{background:var(--primary-dark);transform:translateY(-1px)}
 
-        html { scroll-behavior: smooth; }
+        /* HERO */
+        section{position:relative;z-index:1}
+        .hero{min-height:100vh;display:flex;align-items:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+        .hero::before{content:'';position:absolute;top:-120px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.08) 0%,transparent 70%);pointer-events:none}
+        .hero::after{content:'';position:absolute;bottom:-100px;left:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.06) 0%,transparent 70%);pointer-events:none}
+        .hero-inner{max-width:720px;margin:0 auto;text-align:center;position:relative;z-index:1}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--primary-light);border:1px solid rgba(14,165,233,.15);padding:7px 18px;border-radius:50px;font-size:13px;color:var(--primary-dark);font-weight:600;margin-bottom:28px}
+        .hero h1{font-family:'Fraunces',serif;font-size:clamp(34px,5.5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:20px}
+        .hero h1 .hl{color:var(--primary)}
+        .hero-desc{font-size:17px;color:var(--text-secondary);line-height:1.7;margin-bottom:36px;max-width:540px;margin-left:auto;margin-right:auto}
+        .hero-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        .btn-main{display:inline-flex;align-items:center;gap:10px;background:var(--primary);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:16px;text-decoration:none;transition:all .3s;box-shadow:0 4px 16px rgba(14,165,233,.3)}
+        .btn-main:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba(14,165,233,.35)}
+        .btn-outline{display:inline-flex;align-items:center;gap:10px;background:var(--bg2);color:var(--text);padding:16px 32px;border-radius:14px;font-weight:600;font-size:16px;text-decoration:none;border:1.5px solid var(--border);transition:all .3s}
+        .btn-outline:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px)}
+        .hero-proof{margin-top:40px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
+        .proof-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);font-weight:500}
+        .proof-item svg{width:16px;height:16px;color:var(--green)}
 
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+        /* SECTIONS */
+        .section-pad{padding:80px 24px}
+        .section-alt{background:var(--surface-alt)}
+        .section-header{text-align:center;margin-bottom:48px;max-width:600px;margin-left:auto;margin-right:auto}
+        .section-header .tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--primary);margin-bottom:12px}
+        .section-header h2{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,38px);font-weight:700;letter-spacing:-.8px;line-height:1.15;margin-bottom:14px}
+        .section-header p{font-size:16px;color:var(--text-secondary);line-height:1.6}
+        .container{max-width:1080px;margin:0 auto}
 
-        /* ===== NAV ===== */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            padding: 12px 20px;
-            background: rgba(240,249,255,0.88);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-light);
-        }
-        .nav-inner {
-            max-width: 1080px; margin: 0 auto;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .nav-brand {
-            display: flex; align-items: center; gap: 10px;
-            text-decoration: none; color: var(--text);
-        }
-        .nav-brand img { width: 34px; height: 34px; border-radius: 10px; }
-        .nav-brand span { font-weight: 800; font-size: 17px; letter-spacing: -0.3px; }
-        .nav-brand em { font-style: normal; color: var(--primary-bright); }
-        .nav-right { display: flex; gap: 8px; align-items: center; }
-        .nav-links a.nl {
-            color: var(--text-secondary); text-decoration: none;
-            font-size: 14px; font-weight: 600; padding: 6px 12px;
-            border-radius: 8px; transition: all 0.2s;
-        }
-        .nav-links a.nl:hover { color: var(--primary); background: var(--primary-light); }
-        .lang-toggle {
-            display: flex; background: var(--surface); border: 1.5px solid var(--border);
-            border-radius: 8px; overflow: hidden; margin-right: 8px;
-        }
-        .lang-toggle button {
-            padding: 6px 12px; border: none; background: none;
-            font-size: 13px; font-weight: 700; cursor: pointer;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: var(--text-muted); transition: all 0.2s;
-        }
-        .lang-toggle button.active {
-            background: var(--primary); color: #fff;
-        }
-        .nav-cta {
-            background: var(--primary); color: #fff;
-            padding: 9px 20px; border-radius: var(--radius-sm);
-            font-weight: 700; font-size: 14px; text-decoration: none;
-            transition: all 0.2s; box-shadow: 0 2px 8px rgba(3,105,161,0.3);
-        }
-        .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        /* STEPS */
+        .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+        .step-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px 24px;text-align:center;transition:all .3s;box-shadow:var(--shadow-sm)}
+        .step-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+        .step-num{width:44px;height:44px;border-radius:12px;background:var(--primary-light);color:var(--primary-dark);font-weight:800;font-size:18px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+        .step-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+        .step-card p{font-size:14px;color:var(--text-secondary);line-height:1.6}
 
-        /* ===== HERO ===== */
-        .hero {
-            min-height: 100vh; display: flex; align-items: center;
-            padding: 120px 24px 80px; position: relative; overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute; inset: 0; z-index: 0;
-            background: linear-gradient(165deg, #e0f2fe 0%, #f0f9ff 30%, #fefce8 70%, #e0f2fe 100%);
-        }
-        .hero-wave {
-            position: absolute; bottom: -2px; left: 0; right: 0; z-index: 1;
-        }
-        .hero-orb {
-            position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-        }
-        .hero-orb-1 {
-            width: 500px; height: 500px; top: -150px; right: -100px;
-            background: radial-gradient(circle, rgba(14,165,233,0.12) 0%, transparent 70%);
-        }
-        .hero-orb-2 {
-            width: 400px; height: 400px; bottom: 50px; left: -100px;
-            background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
-        }
-        .hero-inner {
-            max-width: 720px; margin: 0 auto; text-align: center;
-            position: relative; z-index: 2;
-        }
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.8); border: 1.5px solid var(--border);
-            padding: 8px 20px; border-radius: 50px;
-            font-size: 13px; color: var(--primary); font-weight: 700;
-            margin-bottom: 28px; backdrop-filter: blur(8px);
-            box-shadow: var(--shadow-sm);
-        }
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(34px, 5.5vw, 58px);
-            font-weight: 900; line-height: 1.08;
-            letter-spacing: -1.5px; margin-bottom: 20px;
-            color: var(--text);
-        }
-        .hero h1 .hl {
-            color: var(--primary-bright);
-            text-decoration: underline;
-            text-decoration-color: var(--accent);
-            text-underline-offset: 6px;
-            text-decoration-thickness: 3px;
-        }
-        .hero-desc {
-            font-size: 17px; color: var(--text-secondary);
-            line-height: 1.7; margin-bottom: 36px;
-            max-width: 560px; margin-left: auto; margin-right: auto;
-            font-weight: 500;
-        }
-        .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .btn-main {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: var(--primary); color: #fff;
-            padding: 16px 32px; border-radius: 14px;
-            font-weight: 700; font-size: 16px; text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 4px 20px rgba(3,105,161,0.3);
-        }
-        .btn-main:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(3,105,161,0.35); }
-        .btn-outline {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: rgba(255,255,255,0.8); color: var(--text);
-            padding: 16px 32px; border-radius: 14px;
-            font-weight: 700; font-size: 16px; text-decoration: none;
-            border: 1.5px solid var(--border); transition: all 0.3s;
-            backdrop-filter: blur(8px);
-        }
-        .btn-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-        .hero-proof {
-            margin-top: 44px; display: flex; align-items: center;
-            justify-content: center; gap: 28px; flex-wrap: wrap;
-        }
-        .proof-item {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 14px; color: var(--text-secondary); font-weight: 600;
-        }
-        .proof-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
+        /* FEATURES */
+        .features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+        .feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .3s;box-shadow:var(--shadow-sm);display:flex;gap:16px;align-items:flex-start}
+        .feature-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--primary)}
+        .feature-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+        .fi-blue{background:var(--primary-light)}
+        .fi-amber{background:var(--accent-light)}
+        .fi-green{background:var(--green-light)}
+        .fi-slate{background:#f1f5f9}
+        .feature-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+        .feature-card p{font-size:13px;color:var(--text-secondary);line-height:1.5}
 
-        /* ===== SECTIONS COMMON ===== */
-        section { position: relative; z-index: 1; }
-        .section-pad { padding: 80px 24px; }
-        .section-ocean { background: var(--bg); }
-        .section-white { background: var(--bg2); }
-        .section-sand { background: linear-gradient(180deg, #fefce8 0%, #f0f9ff 100%); }
-        .section-header {
-            text-align: center; margin-bottom: 48px; max-width: 600px;
-            margin-left: auto; margin-right: auto;
-        }
-        .section-header .tag {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 13px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1.5px; color: var(--primary);
-            background: var(--primary-light); padding: 6px 16px;
-            border-radius: 50px; margin-bottom: 16px;
-        }
-        .section-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(26px, 4vw, 38px);
-            font-weight: 800; letter-spacing: -0.8px;
-            line-height: 1.15; margin-bottom: 14px; color: var(--text);
-        }
-        .section-header p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; font-weight: 500; }
-        .container { max-width: 1080px; margin: 0 auto; }
+        /* CITIES */
+        .cities-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+        .city-pill{background:var(--bg2);border:1px solid var(--border);border-radius:50px;padding:12px 24px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;transition:all .3s;box-shadow:var(--shadow-sm)}
+        .city-pill:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:var(--shadow)}
+        .city-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
 
-        /* ===== HOW IT WORKS ===== */
-        .steps-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .step-card {
-            background: var(--bg2); border: 1.5px solid var(--border);
-            border-radius: 20px; padding: 32px 24px;
-            text-align: center; position: relative;
-            transition: all 0.3s; box-shadow: var(--shadow-sm);
-        }
-        .step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary-bright); }
-        .step-num {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-bright), var(--primary));
-            color: #fff; font-weight: 800; font-size: 20px;
-            display: inline-flex; align-items: center; justify-content: center;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(14,165,233,0.3);
-        }
-        .step-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
-        .step-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+        /* PRICING */
+        .pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:720px;margin:0 auto}
+        .price-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:20px;padding:32px 28px;position:relative;transition:all .3s;box-shadow:var(--shadow-sm)}
+        .price-card.featured{border-color:var(--primary);box-shadow:0 8px 32px rgba(14,165,233,.12)}
+        .price-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:5px 16px;border-radius:50px;white-space:nowrap}
+        .price-card .plan-name{font-size:14px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+        .price-card .price{font-family:'Fraunces',serif;font-size:40px;font-weight:800;color:var(--text);line-height:1}
+        .price-card .price span{font-size:16px;font-weight:500;color:var(--text-muted)}
+        .price-card .price-desc{font-size:13px;color:var(--text-secondary);margin:12px 0 20px;line-height:1.5}
+        .price-features{list-style:none;margin-bottom:24px}
+        .price-features li{font-size:14px;color:var(--text-secondary);padding:6px 0;display:flex;align-items:center;gap:10px}
+        .price-features li .check{width:20px;height:20px;border-radius:50%;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+        .price-features li .cross{width:20px;height:20px;border-radius:50%;background:#f1f5f9;color:#94a3b8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+        .price-btn{display:block;width:100%;padding:14px;border-radius:12px;text-align:center;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+        .price-btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 12px rgba(14,165,233,.25)}
+        .price-btn-primary:hover{background:var(--primary-dark)}
+        .price-btn-secondary{background:var(--surface-alt);color:var(--text);border:1px solid var(--border)}
+        .price-btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
 
-        /* ===== FEATURES ===== */
-        .features-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-        }
-        .feature-card {
-            background: var(--bg2); border: 1.5px solid var(--border);
-            border-radius: 20px; padding: 28px;
-            transition: all 0.3s; box-shadow: var(--shadow-sm);
-            display: flex; gap: 16px; align-items: flex-start;
-        }
-        .feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--primary-bright); }
-        .feature-icon {
-            width: 48px; height: 48px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; flex-shrink: 0;
-        }
-        .fi-blue { background: var(--primary-light); }
-        .fi-amber { background: var(--accent-light); }
-        .fi-green { background: var(--green-light); }
-        .fi-coral { background: var(--coral-light); }
-        .feature-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 4px; color: var(--text); }
-        .feature-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.55; font-weight: 500; }
+        /* FAQ */
+        .faq-list{max-width:680px;margin:0 auto}
+        .faq-item{border-bottom:1px solid var(--border)}
+        .faq-item:first-child{border-top:1px solid var(--border)}
+        .faq-q{width:100%;background:none;border:none;padding:20px 0;text-align:left;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'DM Sans',sans-serif;line-height:1.4}
+        .faq-q:hover{color:var(--primary)}
+        .faq-arrow{width:24px;height:24px;flex-shrink:0;transition:transform .3s}
+        .faq-item.open .faq-arrow{transform:rotate(180deg)}
+        .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+        .faq-item.open .faq-a{max-height:500px}
+        .faq-a-inner{padding:0 0 20px;font-size:14px;color:var(--text-secondary);line-height:1.7}
 
-        /* ===== CITIES ===== */
-        .cities-row {
-            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-        }
-        .city-pill {
-            background: var(--bg2); border: 1.5px solid var(--border);
-            border-radius: 50px; padding: 14px 28px;
-            display: flex; align-items: center; gap: 10px;
-            font-weight: 700; font-size: 16px; color: var(--text);
-            transition: all 0.3s; box-shadow: var(--shadow-sm);
-        }
-        .city-pill:hover { border-color: var(--primary-bright); transform: translateY(-2px); box-shadow: var(--shadow); background: var(--primary-light); }
-        .city-pill .dot {
-            width: 10px; height: 10px; border-radius: 50%;
-            background: var(--green); display: inline-block;
-            box-shadow: 0 0 6px rgba(5,150,105,0.4);
+        /* CTA */
+        .cta-banner{padding:80px 24px}
+        .cta-box{max-width:680px;margin:0 auto;background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 100%);border-radius:24px;padding:48px 32px;text-align:center;color:#fff;box-shadow:0 12px 40px rgba(14,165,233,.25);position:relative;overflow:hidden}
+        .cta-box::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+        .cta-box::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+        .cta-box h2{font-family:'Fraunces',serif;font-size:clamp(24px,4vw,34px);font-weight:700;margin-bottom:12px;position:relative;z-index:1}
+        .cta-box p{font-size:16px;opacity:.9;margin-bottom:28px;position:relative;z-index:1}
+        .cta-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--primary-dark);padding:16px 36px;border-radius:14px;font-weight:700;font-size:16px;text-decoration:none;transition:all .3s;position:relative;z-index:1;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+        .cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.15)}
+
+        /* FOOTER */
+        footer{border-top:1px solid var(--border);padding:40px 24px 32px}
+        .footer-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+        .footer-left{display:flex;align-items:center;gap:10px}
+        .footer-left img{width:28px;height:28px;border-radius:8px}
+        .footer-left span{font-weight:600;font-size:14px;color:var(--text-secondary)}
+        .footer-links{display:flex;gap:20px}
+        .footer-links a{color:var(--text-muted);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+        .footer-links a:hover{color:var(--primary)}
+        .footer-copy{font-size:13px;color:var(--text-muted)}
+
+        /* RESPONSIVE */
+        @media(max-width:768px){
+            .steps-grid{grid-template-columns:1fr}
+            .features-grid{grid-template-columns:1fr}
+            .pricing-grid{grid-template-columns:1fr;max-width:400px}
+            .nav-links{display:none}
+            .hero h1{font-size:30px;letter-spacing:-1px}
+            .hero-desc{font-size:15px}
+            .hero-buttons{flex-direction:column;align-items:center}
+            .btn-main,.btn-outline{width:100%;justify-content:center;padding:14px 24px;font-size:14px}
+            .hero-proof{flex-direction:column;gap:10px}
+            .cities-row{gap:10px}
+            .city-pill{padding:10px 18px;font-size:14px}
+            .footer-inner{flex-direction:column;text-align:center}
+            .cta-box{padding:36px 24px}
+            .nav-cta{padding:7px 14px;font-size:12px}
         }
 
-        /* ===== PRICING ===== */
-        .pricing-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 24px; max-width: 720px; margin: 0 auto;
-        }
-        .price-card {
-            background: var(--bg2); border: 2px solid var(--border);
-            border-radius: 24px; padding: 36px 28px;
-            position: relative; transition: all 0.3s; box-shadow: var(--shadow-sm);
-        }
-        .price-card.featured {
-            border-color: var(--primary-bright);
-            box-shadow: 0 8px 32px rgba(14,165,233,0.15);
-            background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
-        }
-        .price-badge {
-            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--primary-bright), var(--primary));
-            color: #fff; font-size: 12px; font-weight: 700; padding: 6px 18px;
-            border-radius: 50px; white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(14,165,233,0.3);
-        }
-        .price-card .plan-name {
-            font-size: 14px; font-weight: 700; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
-        }
-        .price-card .price {
-            font-family: 'Playfair Display', serif;
-            font-size: 44px; font-weight: 900; color: var(--text);
-            line-height: 1;
-        }
-        .price-card .price span { font-size: 16px; font-weight: 500; color: var(--text-muted); font-family: 'Plus Jakarta Sans', sans-serif; }
-        .price-card .price-desc {
-            font-size: 14px; color: var(--text-secondary); margin: 12px 0 24px;
-            line-height: 1.5; font-weight: 500;
-        }
-        .price-features { list-style: none; margin-bottom: 28px; }
-        .price-features li {
-            font-size: 14px; color: var(--text-secondary); font-weight: 500;
-            padding: 7px 0; display: flex; align-items: center; gap: 10px;
-        }
-        .price-features li .check {
-            width: 22px; height: 22px; border-radius: 50%;
-            background: var(--green-light); color: var(--green);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 700; flex-shrink: 0;
-        }
-        .price-features li .cross {
-            width: 22px; height: 22px; border-radius: 50%;
-            background: #f1f5f9; color: #94a3b8;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 700; flex-shrink: 0;
-        }
-        .price-btn {
-            display: block; width: 100%; padding: 15px;
-            border-radius: 12px; text-align: center;
-            font-weight: 700; font-size: 15px;
-            text-decoration: none; transition: all 0.2s;
-            border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .price-btn-primary {
-            background: linear-gradient(135deg, var(--primary-bright), var(--primary));
-            color: #fff; box-shadow: 0 4px 16px rgba(14,165,233,0.3);
-        }
-        .price-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,233,0.35); }
-        .price-btn-secondary {
-            background: var(--surface-alt); color: var(--text);
-            border: 1.5px solid var(--border);
-        }
-        .price-btn-secondary:hover { border-color: var(--primary-bright); color: var(--primary); }
-
-        /* ===== FAQ ===== */
-        .faq-list { max-width: 680px; margin: 0 auto; }
-        .faq-item { border-bottom: 1.5px solid var(--border); }
-        .faq-item:first-child { border-top: 1.5px solid var(--border); }
-        .faq-q {
-            width: 100%; background: none; border: none;
-            padding: 22px 0; text-align: left;
-            font-size: 16px; font-weight: 700; color: var(--text);
-            cursor: pointer; display: flex; align-items: center;
-            justify-content: space-between; gap: 16px;
-            font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.4;
-            transition: color 0.2s;
-        }
-        .faq-q:hover { color: var(--primary); }
-        .faq-arrow {
-            width: 28px; height: 28px; flex-shrink: 0;
-            transition: transform 0.3s; color: var(--primary-bright);
-        }
-        .faq-item.open .faq-arrow { transform: rotate(180deg); }
-        .faq-a {
-            max-height: 0; overflow: hidden;
-            transition: max-height 0.35s ease;
-        }
-        .faq-item.open .faq-a { max-height: 500px; }
-        .faq-a-inner {
-            padding: 0 0 22px;
-            font-size: 15px; color: var(--text-secondary); line-height: 1.7; font-weight: 500;
-        }
-
-        /* ===== CTA BANNER ===== */
-        .cta-banner { padding: 80px 24px; }
-        .cta-box {
-            max-width: 700px; margin: 0 auto;
-            background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 50%, #38bdf8 100%);
-            border-radius: 28px; padding: 52px 36px;
-            text-align: center; color: #fff;
-            box-shadow: 0 16px 48px rgba(3,105,161,0.25);
-            position: relative; overflow: hidden;
-        }
-        .cta-box::before {
-            content: ''; position: absolute; top: -80px; right: -80px;
-            width: 250px; height: 250px; border-radius: 50%;
-            background: rgba(255,255,255,0.08); pointer-events: none;
-        }
-        .cta-box::after {
-            content: ''; position: absolute; bottom: -60px; left: -60px;
-            width: 200px; height: 200px; border-radius: 50%;
-            background: rgba(255,255,255,0.05); pointer-events: none;
-        }
-        .cta-box h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(24px, 4vw, 34px);
-            font-weight: 800; margin-bottom: 12px;
-            position: relative; z-index: 1;
-        }
-        .cta-box p {
-            font-size: 16px; opacity: 0.92; margin-bottom: 28px;
-            position: relative; z-index: 1; font-weight: 500;
-        }
-        .cta-btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: #fff; color: var(--primary-dark);
-            padding: 16px 36px; border-radius: 14px;
-            font-weight: 800; font-size: 16px; text-decoration: none;
-            transition: all 0.3s; position: relative; z-index: 1;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        }
-        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.18); }
-
-        /* ===== FOOTER ===== */
-        footer {
-            background: var(--bg2);
-            border-top: 1.5px solid var(--border);
-            padding: 40px 24px 32px;
-        }
-        .footer-inner {
-            max-width: 1080px; margin: 0 auto;
-            display: flex; align-items: center; justify-content: space-between;
-            flex-wrap: wrap; gap: 16px;
-        }
-        .footer-left { display: flex; align-items: center; gap: 10px; }
-        .footer-left img { width: 28px; height: 28px; border-radius: 8px; }
-        .footer-left span { font-weight: 700; font-size: 14px; color: var(--text-secondary); }
-        .footer-links { display: flex; gap: 20px; }
-        .footer-links a {
-            color: var(--text-muted); text-decoration: none;
-            font-size: 13px; font-weight: 600; transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-copy { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .steps-grid { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: 1fr; }
-            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
-            .nav-links { display: none; }
-            .hero h1 { font-size: 30px; letter-spacing: -1px; }
-            .hero-desc { font-size: 15px; }
-            .hero-buttons { flex-direction: column; align-items: center; }
-            .btn-main, .btn-outline { width: 100%; justify-content: center; padding: 15px 24px; font-size: 15px; }
-            .hero-proof { flex-direction: column; gap: 10px; }
-            .cities-row { gap: 10px; }
-            .city-pill { padding: 12px 20px; font-size: 14px; }
-            .footer-inner { flex-direction: column; text-align: center; }
-            .cta-box { padding: 40px 24px; border-radius: 20px; }
-            .lang-toggle button { padding: 5px 10px; font-size: 12px; }
-        }
-
-        /* ===== ANIMATIONS ===== */
-        .animate-in {
-            opacity: 0; transform: translateY(24px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .animate-in.visible { opacity: 1; transform: translateY(0); }
+        .animate-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+        .animate-in.visible{opacity:1;transform:translateY(0)}
     </style>
 </head>
 <body>
@@ -477,7 +186,7 @@
             <span>Backpack<em>Radar</em></span>
         </a>
         <div class="nav-right">
-            <div class="nav-links" style="display:flex;gap:4px;align-items:center;margin-right:8px;">
+            <div class="nav-links">
                 <a href="#how" class="nl" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</a>
                 <a href="#pricing" class="nl" data-fr="Tarifs" data-en="Pricing">Tarifs</a>
                 <a href="#faq" class="nl" data-fr="FAQ" data-en="FAQ">FAQ</a>
@@ -493,32 +202,28 @@
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
     <div class="hero-inner">
-        <div class="hero-badge" data-fr="🇦🇺 Pour les backpackers en WHV / PVT" data-en="🇦🇺 For Working Holiday Visa holders">🇦🇺 Pour les backpackers en WHV / PVT</div>
+        <div class="hero-badge" data-fr="🇦🇺 Conçu pour les détenteurs de WHV / PVT" data-en="🇦🇺 Built for Working Holiday Visa holders">🇦🇺 Conçu pour les détenteurs de WHV / PVT</div>
         <h1 data-fr="Trouve un job en Australie <span class='hl'>sans effort</span>" data-en="Find a job in Australia <span class='hl'>effortlessly</span>">Trouve un job en Australie <span class="hl">sans effort</span></h1>
-        <p class="hero-desc" data-fr="BackpackRadar scanne les offres d'emploi sur Seek.com.au, filtre avec l'IA celles adaptées aux backpackers, et te les envoie directement sur Telegram. Automatiquement." data-en="BackpackRadar scans job listings on Seek.com.au, filters with AI the ones suitable for backpackers, and sends them directly to your Telegram. Automatically.">BackpackRadar scanne les offres d'emploi sur Seek.com.au, filtre avec l'IA celles adaptées aux backpackers, et te les envoie directement sur Telegram. Automatiquement.</p>
+        <p class="hero-desc" data-fr="BackpackRadar scanne les offres d'emploi sur Seek.com.au, filtre avec l'IA celles adaptées aux backpackers, et te les envoie directement sur Telegram. Automatiquement." data-en="BackpackRadar scans job listings on Seek.com.au, uses AI to filter the ones suitable for backpackers, and sends them straight to your Telegram. Automatically.">BackpackRadar scanne les offres d'emploi sur Seek.com.au, filtre avec l'IA celles adaptées aux backpackers, et te les envoie directement sur Telegram. Automatiquement.</p>
         <div class="hero-buttons">
-            <a href="https://t.me/backpackradar_bot" class="btn-main" target="_blank" data-fr="<svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z'/></svg> Accéder à l'outil" data-en="<svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z'/></svg> Access the tool">
+            <a href="https://t.me/backpackradar_bot" class="btn-main" target="_blank">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-                Accéder à l'outil
+                <span data-fr="Accéder à l'outil" data-en="Access the tool">Accéder à l'outil</span>
             </a>
             <a href="#how" class="btn-outline" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</a>
         </div>
         <div class="hero-proof">
-            <div class="proof-item"><span class="proof-dot"></span> <span data-fr="~100 offres/jour" data-en="~100 jobs/day">~100 offres/jour</span></div>
-            <div class="proof-item"><span class="proof-dot"></span> <span data-fr="5 villes" data-en="5 cities">5 villes</span></div>
-            <div class="proof-item"><span class="proof-dot"></span> <span data-fr="Gratuit pour commencer" data-en="Free to start">Gratuit pour commencer</span></div>
-            <div class="proof-item"><span class="proof-dot"></span> <span data-fr="24h/24, 7j/7" data-en="24/7">24h/24, 7j/7</span></div>
+            <div class="proof-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> <span data-fr="~100 offres/jour" data-en="~100 jobs/day">~100 offres/jour</span></div>
+            <div class="proof-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> <span data-fr="5 villes couvertes" data-en="5 cities covered">5 villes couvertes</span></div>
+            <div class="proof-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> <span data-fr="Gratuit pour commencer" data-en="Free to start">Gratuit pour commencer</span></div>
+            <div class="proof-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> <span data-fr="24h/24, 7j/7" data-en="24/7">24h/24, 7j/7</span></div>
         </div>
     </div>
-    <svg class="hero-wave" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 80V40C240 0 480 0 720 20C960 40 1200 80 1440 60V80H0Z" fill="#ffffff"/></svg>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="section-pad section-white" id="how">
+<section class="section-pad section-alt" id="how">
     <div class="container">
         <div class="section-header animate-in">
             <div class="tag" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</div>
@@ -534,7 +239,7 @@
             <div class="step-card animate-in">
                 <div class="step-num">2</div>
                 <h3 data-fr="Choisis ta ville" data-en="Pick your city">Choisis ta ville</h3>
-                <p data-fr="Sélectionne ta langue (FR/EN) puis ta ville parmi Sydney, Melbourne, Brisbane, Perth ou Adelaide." data-en="Select your language (FR/EN) then your city among Sydney, Melbourne, Brisbane, Perth or Adelaide.">Sélectionne ta langue (FR/EN) puis ta ville parmi Sydney, Melbourne, Brisbane, Perth ou Adelaide.</p>
+                <p data-fr="Sélectionne ta langue (FR/EN) puis ta ville parmi Sydney, Melbourne, Brisbane, Perth ou Adelaide." data-en="Select your language (FR/EN) then your city: Sydney, Melbourne, Brisbane, Perth or Adelaide.">Sélectionne ta langue (FR/EN) puis ta ville parmi Sydney, Melbourne, Brisbane, Perth ou Adelaide.</p>
             </div>
             <div class="step-card animate-in">
                 <div class="step-num">3</div>
@@ -546,7 +251,7 @@
 </section>
 
 <!-- FEATURES -->
-<section class="section-pad section-ocean" id="features">
+<section class="section-pad" id="features">
     <div class="container">
         <div class="section-header animate-in">
             <div class="tag" data-fr="Pourquoi BackpackRadar" data-en="Why BackpackRadar">Pourquoi BackpackRadar</div>
@@ -565,18 +270,18 @@
                 <div class="feature-icon fi-amber">⚡</div>
                 <div>
                     <h3 data-fr="Scan toutes les 40–50 min" data-en="Scans every 40–50 min">Scan toutes les 40–50 min</h3>
-                    <p data-fr="Le bot tourne 24h/24 et scanne les nouvelles offres publiées sur Seek.com.au automatiquement. Tu ne rates rien." data-en="The bot runs 24/7 and automatically scans new listings published on Seek.com.au. You never miss a thing.">Le bot tourne 24h/24 et scanne les nouvelles offres publiées sur Seek.com.au automatiquement. Tu ne rates rien.</p>
+                    <p data-fr="Le bot tourne 24h/24 et scanne les nouvelles offres publiées sur Seek.com.au automatiquement. Tu ne rates rien." data-en="The bot runs 24/7 and scans new listings on Seek.com.au automatically. You never miss a thing.">Le bot tourne 24h/24 et scanne les nouvelles offres publiées sur Seek.com.au automatiquement. Tu ne rates rien.</p>
                 </div>
             </div>
             <div class="feature-card animate-in">
-                <div class="feature-icon fi-coral">🚫</div>
+                <div class="feature-icon fi-green">🚫</div>
                 <div>
                     <h3 data-fr="Offres inaccessibles éliminées" data-en="Inaccessible jobs removed">Offres inaccessibles éliminées</h3>
                     <p data-fr="Les postes qui demandent des diplômes australiens, de l'expérience senior ou la citoyenneté sont automatiquement exclus." data-en="Jobs requiring Australian qualifications, senior experience or citizenship are automatically excluded.">Les postes qui demandent des diplômes australiens, de l'expérience senior ou la citoyenneté sont automatiquement exclus.</p>
                 </div>
             </div>
             <div class="feature-card animate-in">
-                <div class="feature-icon fi-green">📱</div>
+                <div class="feature-icon fi-slate">📱</div>
                 <div>
                     <h3 data-fr="Notifications en temps réel" data-en="Real-time notifications">Notifications en temps réel</h3>
                     <p data-fr="Chaque nouvelle offre arrive comme une notification Telegram. Postule en premier pendant que l'offre est fraîche." data-en="Every new listing arrives as a Telegram notification. Apply first while the listing is fresh.">Chaque nouvelle offre arrive comme une notification Telegram. Postule en premier pendant que l'offre est fraîche.</p>
@@ -586,7 +291,7 @@
                 <div class="feature-icon fi-blue">🌐</div>
                 <div>
                     <h3 data-fr="Français & Anglais" data-en="French & English">Français & Anglais</h3>
-                    <p data-fr="Le bot est bilingue. Choisis ta langue au premier lancement et change à tout moment avec /lang." data-en="The bot is bilingual. Choose your language at first launch and change anytime with /lang.">Le bot est bilingue. Choisis ta langue au premier lancement et change à tout moment avec /lang.</p>
+                    <p data-fr="Le bot est bilingue. Choisis ta langue au premier lancement et change à tout moment avec /lang." data-en="The bot is bilingual. Choose your language at first launch and switch anytime with /lang.">Le bot est bilingue. Choisis ta langue au premier lancement et change à tout moment avec /lang.</p>
                 </div>
             </div>
             <div class="feature-card animate-in">
@@ -601,7 +306,7 @@
 </section>
 
 <!-- CITIES -->
-<section class="section-pad section-white" id="cities">
+<section class="section-pad section-alt" id="cities">
     <div class="container">
         <div class="section-header animate-in">
             <div class="tag" data-fr="Villes couvertes" data-en="Cities covered">Villes couvertes</div>
@@ -619,7 +324,7 @@
 </section>
 
 <!-- PRICING -->
-<section class="section-pad section-sand" id="pricing">
+<section class="section-pad" id="pricing">
     <div class="container">
         <div class="section-header animate-in">
             <div class="tag" data-fr="Tarifs" data-en="Pricing">Tarifs</div>
@@ -627,6 +332,7 @@
             <p data-fr="Le plan gratuit n'a aucune limite de temps. Passe Pro quand tu es prêt." data-en="The free plan has no time limit. Go Pro when you're ready.">Le plan gratuit n'a aucune limite de temps. Passe Pro quand tu es prêt.</p>
         </div>
         <div class="pricing-grid animate-in">
+            <!-- FREE -->
             <div class="price-card">
                 <div class="plan-name" data-fr="Gratuit" data-en="Free">Gratuit</div>
                 <div class="price">$0</div>
@@ -641,6 +347,7 @@
                 </ul>
                 <a href="https://t.me/backpackradar_bot" class="price-btn price-btn-secondary" target="_blank" data-fr="Commencer gratuitement" data-en="Start for free">Commencer gratuitement</a>
             </div>
+            <!-- PRO -->
             <div class="price-card featured">
                 <div class="price-badge" data-fr="⭐ Recommandé" data-en="⭐ Recommended">⭐ Recommandé</div>
                 <div class="plan-name">Pro</div>
@@ -660,7 +367,7 @@
 </section>
 
 <!-- FAQ -->
-<section class="section-pad section-white" id="faq">
+<section class="section-pad section-alt" id="faq">
     <div class="container">
         <div class="section-header animate-in">
             <div class="tag">FAQ</div>
@@ -668,43 +375,47 @@
         </div>
         <div class="faq-list animate-in">
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="C'est quoi BackpackRadar exactement ?" data-en="What exactly is BackpackRadar?">C'est quoi BackpackRadar exactement ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+                <button class="faq-q"><span data-fr="C'est quoi BackpackRadar exactement ?" data-en="What exactly is BackpackRadar?">C'est quoi BackpackRadar exactement ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <div class="faq-a"><div class="faq-a-inner" data-fr="BackpackRadar est un bot Telegram qui scanne automatiquement les offres d'emploi sur Seek.com.au, filtre avec l'IA celles qui sont réellement accessibles aux backpackers en WHV/PVT, et les envoie dans des canaux Telegram organisés par ville. Tu reçois les offres sans rien faire." data-en="BackpackRadar is a Telegram bot that automatically scans job listings on Seek.com.au, uses AI to filter only the ones accessible to WHV/WHP backpackers, and sends them to Telegram channels organized by city. You receive jobs without doing anything.">BackpackRadar est un bot Telegram qui scanne automatiquement les offres d'emploi sur Seek.com.au, filtre avec l'IA celles qui sont réellement accessibles aux backpackers en WHV/PVT, et les envoie dans des canaux Telegram organisés par ville. Tu reçois les offres sans rien faire.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Comment je m'inscris ?" data-en="How do I sign up?">Comment je m'inscris ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Ouvre Telegram, cherche @backpackradar_bot et tape /start. Choisis ta langue (français ou anglais), puis ta ville. Tu rejoins le canal gratuit et tu commences à recevoir les offres immédiatement. Aucun email, aucun mot de passe." data-en="Open Telegram, search @backpackradar_bot and type /start. Choose your language (French or English), then your city. You join the free channel and start receiving jobs immediately. No email, no password.">Ouvre Telegram, cherche @backpackradar_bot et tape /start. Choisis ta langue (français ou anglais), puis ta ville. Tu rejoins le canal gratuit et tu commences à recevoir les offres immédiatement. Aucun email, aucun mot de passe.</div></div>
+                <button class="faq-q"><span data-fr="Comment je m'inscris ?" data-en="How do I sign up?">Comment je m'inscris ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Ouvre Telegram, cherche @backpackradar_bot et tape /start. Choisis ta langue (français ou anglais), puis ta ville. Tu rejoins le canal gratuit et tu commences à recevoir les offres immédiatement. Aucun email, aucun mot de passe." data-en="Open Telegram, search @backpackradar_bot and type /start. Choose your language (French or English), then your city. Join the free channel and start receiving jobs immediately. No email, no password.">Ouvre Telegram, cherche @backpackradar_bot et tape /start. Choisis ta langue (français ou anglais), puis ta ville. Tu rejoins le canal gratuit et tu commences à recevoir les offres immédiatement. Aucun email, aucun mot de passe.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Quelle différence entre gratuit et Pro ?" data-en="What's the difference between Free and Pro?">Quelle différence entre gratuit et Pro ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Le plan gratuit te donne accès aux offres avec le titre, l'entreprise, le salaire et le type de contrat, mais sans le lien pour postuler. Le plan Pro à $9.99 AUD/mois te donne le lien direct pour postuler en 1 clic, plus l'accès aux canaux Pro de toutes les villes." data-en="The free plan gives you access to listings with the title, company, salary and contract type, but without the apply link. The Pro plan at $9.99 AUD/month gives you the direct link to apply in 1 click, plus access to Pro channels for all cities.">Le plan gratuit te donne accès aux offres avec le titre, l'entreprise, le salaire et le type de contrat, mais sans le lien pour postuler. Le plan Pro à $9.99 AUD/mois te donne le lien direct pour postuler en 1 clic, plus l'accès aux canaux Pro de toutes les villes.</div></div>
+                <button class="faq-q"><span data-fr="Quelle différence entre gratuit et Pro ?" data-en="What's the difference between Free and Pro?">Quelle différence entre gratuit et Pro ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Le plan gratuit te donne accès aux offres avec le titre, l'entreprise, le salaire et le type de contrat, mais sans le lien pour postuler. Le plan Pro à $9.99 AUD/mois te donne le lien direct pour postuler en 1 clic, plus l'accès aux canaux Pro de toutes les villes." data-en="The free plan gives you listings with title, company, salary and contract type, but without the apply link. The Pro plan at $9.99 AUD/month gives you the direct link to apply in 1 click, plus access to Pro channels for all cities.">Le plan gratuit te donne accès aux offres avec le titre, l'entreprise, le salaire et le type de contrat, mais sans le lien pour postuler. Le plan Pro à $9.99 AUD/mois te donne le lien direct pour postuler en 1 clic, plus l'accès aux canaux Pro de toutes les villes.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Comment fonctionne le paiement ?" data-en="How does payment work?">Comment fonctionne le paiement ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Tape /premium dans le bot et clique sur 'S'abonner'. Tu es redirigé vers une page Stripe sécurisée où tu entres ta carte. Une fois le paiement validé, le bot t'envoie automatiquement les liens d'invitation pour tous les canaux Pro. $9.99 AUD/mois, renouvelé automatiquement." data-en="Type /premium in the bot and click 'Subscribe'. You're redirected to a secure Stripe page where you enter your card. Once payment is confirmed, the bot automatically sends you invite links for all Pro channels. $9.99 AUD/month, auto-renewed.">Tape /premium dans le bot et clique sur "S'abonner". Tu es redirigé vers une page Stripe sécurisée où tu entres ta carte. Une fois le paiement validé, le bot t'envoie automatiquement les liens d'invitation pour tous les canaux Pro. $9.99 AUD/mois, renouvelé automatiquement.</div></div>
+                <button class="faq-q"><span data-fr="Comment fonctionne le paiement ?" data-en="How does payment work?">Comment fonctionne le paiement ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Tape /premium dans le bot et clique sur « S'abonner ». Tu es redirigé vers une page Stripe sécurisée où tu entres ta carte. Une fois le paiement validé, le bot t'envoie automatiquement les liens d'invitation pour tous les canaux Pro. $9.99 AUD/mois, renouvelé automatiquement." data-en="Type /premium in the bot and click 'Subscribe'. You're redirected to a secure Stripe page where you enter your card. Once confirmed, the bot automatically sends invite links for all Pro channels. $9.99 AUD/month, auto-renewed.">Tape /premium dans le bot et clique sur « S'abonner ». Tu es redirigé vers une page Stripe sécurisée où tu entres ta carte. Une fois le paiement validé, le bot t'envoie automatiquement les liens d'invitation pour tous les canaux Pro. $9.99 AUD/mois, renouvelé automatiquement.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Comment résilier mon abonnement ?" data-en="How do I cancel my subscription?">Comment résilier mon abonnement ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Tape /status ou /premium dans le bot et clique sur 'Gérer ton abonnement'. Tu arrives sur une page Stripe sécurisée où tu peux annuler en 2 clics. L'abonnement reste actif jusqu'à la fin de la période payée." data-en="Type /status or /premium in the bot and click 'Manage your subscription'. You'll reach a secure Stripe page where you can cancel in 2 clicks. The subscription stays active until the end of the paid period.">Tape /status ou /premium dans le bot et clique sur "Gérer ton abonnement". Tu arrives sur une page Stripe sécurisée où tu peux annuler en 2 clics. L'abonnement reste actif jusqu'à la fin de la période payée.</div></div>
+                <button class="faq-q"><span data-fr="Comment résilier mon abonnement ?" data-en="How do I cancel my subscription?">Comment résilier mon abonnement ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Tape /status ou /premium et clique sur « Gérer ton abonnement ». Tu arrives sur une page Stripe sécurisée où tu peux annuler en 2 clics. L'abonnement reste actif jusqu'à la fin de la période payée." data-en="Type /status or /premium and click 'Manage your subscription'. You reach a secure Stripe page where you can cancel in 2 clicks. The subscription stays active until the end of the paid period.">Tape /status ou /premium et clique sur « Gérer ton abonnement ». Tu arrives sur une page Stripe sécurisée où tu peux annuler en 2 clics. L'abonnement reste actif jusqu'à la fin de la période payée.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Quels types de jobs sont proposés ?" data-en="What types of jobs are offered?">Quels types de jobs sont proposés ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction et labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), admin d'entrée (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, et plus encore." data-en="Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction and labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), entry-level admin (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, and more.">Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction et labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), admin d'entrée (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, et plus encore.</div></div>
+                <button class="faq-q"><span data-fr="Quels types de jobs sont proposés ?" data-en="What types of jobs are listed?">Quels types de jobs sont proposés ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction et labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), admin d'entrée (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, et plus encore." data-en="Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction and labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), entry admin (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, and more.">Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction et labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), admin d'entrée (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, et plus encore.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Faut-il un compte Seek ?" data-en="Do I need a Seek account?">Faut-il un compte Seek ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Non. BackpackRadar te trouve les offres automatiquement. En plan Pro, le lien t'emmène directement sur la page Seek de l'offre. Tu peux créer un compte Seek gratuitement à ce moment-là si nécessaire." data-en="No. BackpackRadar finds the listings for you automatically. With the Pro plan, the link takes you directly to the Seek job page. You can create a free Seek account at that point if needed.">Non. BackpackRadar te trouve les offres automatiquement. En plan Pro, le lien t'emmène directement sur la page Seek de l'offre. Tu peux créer un compte Seek gratuitement à ce moment-là si nécessaire.</div></div>
+                <button class="faq-q"><span data-fr="Quels jobs sont exclus et pourquoi ?" data-en="What jobs are excluded and why?">Quels jobs sont exclus et pourquoi ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Les postes de direction (CEO, director, senior manager), les professions réglementées (infirmier, avocat, comptable, architecte), l'ingénierie (software, civil, mechanical), l'enseignement et les graduate programs. Ces offres demandent des qualifications australiennes, la citoyenneté ou une expérience senior." data-en="Management positions (CEO, director, senior manager), regulated professions (nurse, lawyer, accountant, architect), engineering (software, civil, mechanical), teaching and graduate programs. These jobs require Australian qualifications, citizenship or senior experience.">Les postes de direction (CEO, director, senior manager), les professions réglementées (infirmier, avocat, comptable, architecte), l'ingénierie (software, civil, mechanical), l'enseignement et les graduate programs. Ces offres demandent des qualifications australiennes, la citoyenneté ou une expérience senior.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Le bot fonctionne tout le temps ?" data-en="Does the bot run all the time?">Le bot fonctionne tout le temps ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+                <button class="faq-q"><span data-fr="Faut-il un compte Seek ?" data-en="Do I need a Seek account?">Faut-il un compte Seek ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Non. BackpackRadar te trouve les offres automatiquement. En plan Pro, le lien t'emmène directement sur la page Seek de l'offre. Tu peux créer un compte Seek gratuitement à ce moment-là si nécessaire." data-en="No. BackpackRadar finds listings for you automatically. With Pro, the link takes you directly to the Seek job page. You can create a free Seek account at that point if needed.">Non. BackpackRadar te trouve les offres automatiquement. En plan Pro, le lien t'emmène directement sur la page Seek de l'offre. Tu peux créer un compte Seek gratuitement à ce moment-là si nécessaire.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q"><span data-fr="Le bot fonctionne tout le temps ?" data-en="Does the bot run all the time?">Le bot fonctionne tout le temps ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <div class="faq-a"><div class="faq-a-inner" data-fr="Oui, 24h/24, 7j/7. Le bot tourne sur un serveur dédié et scanne les nouvelles offres toutes les 40 à 50 minutes automatiquement." data-en="Yes, 24/7. The bot runs on a dedicated server and scans for new listings every 40 to 50 minutes automatically.">Oui, 24h/24, 7j/7. Le bot tourne sur un serveur dédié et scanne les nouvelles offres toutes les 40 à 50 minutes automatiquement.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Le plan gratuit a une limite de temps ?" data-en="Does the free plan have a time limit?">Le plan gratuit a une limite de temps ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
-                <div class="faq-a"><div class="faq-a-inner" data-fr="Non, aucune limite. Le plan gratuit est gratuit pour toujours. Tu reçois les mêmes offres que les membres Pro (titre, entreprise, ville, contrat, salaire). Seul le lien pour postuler est réservé au plan Pro." data-en="No, no limit. The free plan is free forever. You receive the same listings as Pro members (title, company, city, contract, salary). Only the apply link is reserved for the Pro plan.">Non, aucune limite. Le plan gratuit est gratuit pour toujours. Tu reçois les mêmes offres que les membres Pro (titre, entreprise, ville, contrat, salaire). Seul le lien pour postuler est réservé au plan Pro.</div></div>
+                <button class="faq-q"><span data-fr="Le plan gratuit a une limite de temps ?" data-en="Does the free plan have a time limit?">Le plan gratuit a une limite de temps ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+                <div class="faq-a"><div class="faq-a-inner" data-fr="Non, aucune limite. Le plan gratuit est gratuit pour toujours. Tu reçois les mêmes offres que les membres Pro (titre, entreprise, ville, contrat, salaire). Seul le lien pour postuler est réservé au plan Pro." data-en="No, no limit. The free plan is free forever. You get the same listings as Pro members (title, company, city, contract, salary). Only the apply link is Pro-exclusive.">Non, aucune limite. Le plan gratuit est gratuit pour toujours. Tu reçois les mêmes offres que les membres Pro (titre, entreprise, ville, contrat, salaire). Seul le lien pour postuler est réservé au plan Pro.</div></div>
             </div>
             <div class="faq-item">
-                <button class="faq-q"><span data-fr="Comment contacter le support ?" data-en="How do I contact support?">Comment contacter le support ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+                <button class="faq-q"><span data-fr="Comment contacter le support ?" data-en="How do I contact support?">Comment contacter le support ?</span><svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
                 <div class="faq-a"><div class="faq-a-inner" data-fr="Envoie un message à @Backpackradarapp sur Telegram à tout moment." data-en="Send a message to @Backpackradarapp on Telegram anytime.">Envoie un message à @Backpackradarapp sur Telegram à tout moment.</div></div>
             </div>
         </div>
@@ -740,52 +451,37 @@
 </footer>
 
 <script>
-// ===== LANGUAGE SWITCHER =====
-let currentLang = 'fr';
-
-document.querySelectorAll('.lang-toggle button').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const lang = btn.dataset.lang;
-        if (lang === currentLang) return;
-        currentLang = lang;
-        document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+// LANGUAGE SWITCHER
+let currentLang='fr';
+document.querySelectorAll('.lang-toggle button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const lang=btn.dataset.lang;
+        if(lang===currentLang)return;
+        currentLang=lang;
+        document.querySelectorAll('.lang-toggle button').forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
-        document.documentElement.lang = lang;
-
-        document.querySelectorAll('[data-fr][data-en]').forEach(el => {
-            const text = el.getAttribute('data-' + lang);
-            if (el.tagName === 'A' || el.tagName === 'BUTTON') {
-                // For links/buttons that contain SVG + text, only update if no SVG child
-                if (el.querySelector('svg') && el.children.length > 1) {
-                    // Find the text node or span
-                    const spans = el.querySelectorAll('span[data-fr]');
-                    spans.forEach(s => { s.innerHTML = s.getAttribute('data-' + lang); });
-                    return;
-                }
-            }
-            el.innerHTML = text;
+        document.documentElement.lang=lang;
+        document.querySelectorAll('[data-fr][data-en]').forEach(el=>{
+            el.innerHTML=el.getAttribute('data-'+lang);
         });
     });
 });
 
-// ===== FAQ ACCORDION =====
-document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const item = btn.parentElement;
-        const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-        if (!isOpen) item.classList.add('open');
+// FAQ
+document.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const item=btn.parentElement;
+        const isOpen=item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+        if(!isOpen)item.classList.add('open');
     });
 });
 
-// ===== SCROLL ANIMATIONS =====
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+// SCROLL ANIMATIONS
+const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.animate-in').forEach(el=>observer.observe(el));
 </script>
 
 </body>
