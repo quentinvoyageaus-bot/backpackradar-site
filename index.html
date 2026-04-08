@@ -35,8 +35,7 @@
         /* NAV */
         nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-light)}
         .nav-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
-        .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
-        .nav-brand img{width:34px;height:34px;border-radius:10px}
+        .nav-brand{display:flex;align-items:center;text-decoration:none;color:var(--text)}
         .nav-brand span{font-weight:700;font-size:17px;letter-spacing:-.3px}
         .nav-brand em{font-style:normal;color:var(--primary)}
         .nav-right{display:flex;align-items:center;gap:6px}
@@ -146,8 +145,7 @@
         /* FOOTER */
         footer{border-top:1px solid var(--border);padding:40px 24px 32px}
         .footer-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-        .footer-left{display:flex;align-items:center;gap:10px}
-        .footer-left img{width:28px;height:28px;border-radius:8px}
+        .footer-left{display:flex;align-items:center}
         .footer-left span{font-weight:600;font-size:14px;color:var(--text-secondary)}
         .footer-links{display:flex;gap:20px}
         .footer-links a{color:var(--text-muted);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
@@ -156,20 +154,42 @@
 
         /* RESPONSIVE */
         @media(max-width:768px){
-            .steps-grid{grid-template-columns:1fr}
-            .features-grid{grid-template-columns:1fr}
-            .pricing-grid{grid-template-columns:1fr;max-width:400px}
+            nav{padding:10px 16px}
+            .nav-brand span{font-size:15px}
+            .nav-right{gap:4px}
+            .lang-toggle{margin-left:2px}
+            .lang-toggle button{padding:5px 9px;font-size:11px}
+            .nav-cta{padding:7px 12px;font-size:11px;margin-left:2px}
             .nav-links{display:none}
-            .hero h1{font-size:30px;letter-spacing:-1px}
-            .hero-desc{font-size:15px}
+            .hero{padding:100px 20px 60px;min-height:auto}
+            .hero-badge{font-size:12px;padding:6px 14px;margin-bottom:20px}
+            .hero h1{font-size:28px;letter-spacing:-1px}
+            .hero-desc{font-size:15px;margin-bottom:28px}
             .hero-buttons{flex-direction:column;align-items:center}
-            .btn-main,.btn-outline{width:100%;justify-content:center;padding:14px 24px;font-size:14px}
-            .hero-proof{flex-direction:column;gap:10px}
-            .cities-row{gap:10px}
-            .city-pill{padding:10px 18px;font-size:14px}
-            .footer-inner{flex-direction:column;text-align:center}
-            .cta-box{padding:36px 24px}
-            .nav-cta{padding:7px 14px;font-size:12px}
+            .btn-main,.btn-outline{width:100%;justify-content:center;padding:14px 20px;font-size:14px}
+            .hero-proof{flex-direction:column;gap:8px;margin-top:32px}
+            .section-pad{padding:60px 20px}
+            .section-header{margin-bottom:36px}
+            .section-header h2{font-size:24px}
+            .section-header p{font-size:14px}
+            .steps-grid{grid-template-columns:1fr;gap:16px}
+            .step-card{padding:24px 20px}
+            .features-grid{grid-template-columns:1fr;gap:14px}
+            .feature-card{padding:22px 18px}
+            .feature-card h3{font-size:14px}
+            .feature-card p{font-size:12px}
+            .pricing-grid{grid-template-columns:1fr;max-width:100%}
+            .price-card{padding:28px 22px}
+            .cities-row{gap:8px}
+            .city-pill{padding:10px 16px;font-size:13px}
+            .faq-q{font-size:14px;padding:18px 0}
+            .faq-a-inner{font-size:13px}
+            .cta-box{padding:36px 20px;border-radius:20px}
+            .cta-box h2{font-size:22px}
+            .cta-box p{font-size:14px}
+            .cta-btn{padding:14px 28px;font-size:14px}
+            .footer-inner{flex-direction:column;text-align:center;gap:12px}
+            .footer-links{gap:16px}
         }
 
         .animate-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
@@ -182,7 +202,6 @@
 <nav>
     <div class="nav-inner">
         <a href="/" class="nav-brand">
-            <img src="/logo-192.png" alt="BackpackRadar">
             <span>Backpack<em>Radar</em></span>
         </a>
         <div class="nav-right">
@@ -438,7 +457,6 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-left">
-            <img src="/logo-192.png" alt="BackpackRadar">
             <span>BackpackRadar</span>
         </div>
         <div class="footer-links">
