@@ -2,186 +2,777 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>BackpackRadar — Ton radar à jobs en Australie 🦘</title>
-    <meta name="description" content="L'app qui trouve tes jobs en WHV Australie. Alertes emploi par IA, outils backpackers, communauté par ville.">
-    <meta property="og:title" content="BackpackRadar — Ton radar à jobs en Australie 🦘">
-    <meta property="og:description" content="Alertes emploi par IA, outils WHV, communauté backpackers. Rejoins la waitlist !">
-    <meta name="theme-color" content="#0B1120">
-    <link rel="icon" type="image/png" href="logo-192.png">
-    <link rel="apple-touch-icon" href="logo-192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BackpackRadar — Trouve un job en Australie automatiquement</title>
+    <meta name="description" content="Le bot Telegram qui trouve automatiquement les offres d'emploi WHV en Australie. 5 villes, filtre IA, alertes en temps réel.">
+    <meta property="og:title" content="BackpackRadar — Trouve un job WHV en Australie automatiquement">
+    <meta property="og:description" content="Bot Telegram qui scanne et filtre les offres d'emploi pour les backpackers en WHV/PVT. 5 villes, 100+ offres/jour.">
+    <meta property="og:image" content="/logo-512.png">
+    <meta property="og:url" content="https://backpackradar.app">
+    <meta name="theme-color" content="#0ea5e9">
+    <link rel="icon" type="image/png" href="/logo-192.png">
+    <link rel="apple-touch-icon" href="/logo-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
     <style>
-        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#0B1120;color:#F1F5F9;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
-        a{color:#38BDF8;text-decoration:none}
-        input,button{font-family:inherit}
-        ::placeholder{color:#475569}
-        img{display:inline-block;max-width:100%}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-        @keyframes glow{0%,100%{box-shadow:0 4px 24px rgba(56,189,248,.2)}50%{box-shadow:0 4px 40px rgba(56,189,248,.35)}}
-        @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
-        .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
-        .reveal.visible{opacity:1;transform:translateY(0)}
-        .container{width:100%;max-width:480px;margin:0 auto;padding:0 20px}
-        .nav{position:sticky;top:0;z-index:50;background:rgba(11,17,32,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(56,189,248,.06)}
-        .nav-inner{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;max-width:480px;margin:0 auto}
-        .nav-brand{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800;letter-spacing:-.3px}
-        .nav-brand span{color:#38BDF8}
-        .nav-brand img{border-radius:8px}
-        .nav-links{display:flex;gap:6px}
-        .nav-links a{padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;color:#94A3B8;background:rgba(255,255,255,.04);transition:all .2s}
-        .nav-links a:active{background:rgba(56,189,248,.12);color:#38BDF8}
-        .hero{padding:48px 0 8px;text-align:center}
-        .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:50px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.12);font-size:12px;font-weight:600;color:#38BDF8;margin-bottom:28px}
-        .hero-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite}
-        .hero-logo{width:100px;height:100px;margin:0 auto 20px;border-radius:24px;animation:float 4s ease-in-out infinite;box-shadow:0 8px 32px rgba(0,0,0,.3)}
-        .hero h1{font-size:30px;font-weight:900;line-height:1.2;letter-spacing:-1px;margin-bottom:14px}
-        .hero h1 span{color:#38BDF8}
-        .hero-sub{color:#94A3B8;font-size:15px;line-height:1.7;max-width:320px;margin:0 auto 32px}
-        .form-card{background:#141B2D;border:1px solid rgba(56,189,248,.08);border-radius:20px;padding:24px 20px;margin-bottom:12px}
-        .form-row{display:flex;gap:8px}
-        .form-row input{flex:1;padding:15px 16px;border-radius:14px;border:1.5px solid #1E293B;background:#0B1120;color:#F1F5F9;font-size:15px;outline:none;transition:border .2s;min-width:0}
-        .form-row input:focus{border-color:#38BDF8}
-        .btn-main{padding:15px 22px;border-radius:14px;border:none;background:linear-gradient(135deg,#38BDF8,#0EA5E9);color:#0B1120;font-size:15px;font-weight:700;cursor:pointer;animation:glow 3s infinite;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:transform .15s}
-        .btn-main:active{transform:scale(.96)}
-        .form-note{color:#475569;font-size:11px;text-align:center;padding:4px 0 0}
-        .form-hidden{display:none!important}
-        .success-msg{padding:24px 20px;border-radius:20px;text-align:center;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.12)}
-        .success-msg .emoji{font-size:36px;display:block;margin-bottom:10px}
-        .success-msg h3{color:#22C55E;font-size:16px;font-weight:700;margin-bottom:4px}
-        .success-msg p{color:#94A3B8;font-size:13px}
-        .cd{padding:36px 0;text-align:center}
-        .cd-label{color:#475569;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:16px}
-        .cd-boxes{display:flex;justify-content:center;gap:10px}
-        .cd-box{width:68px;padding:14px 0;border-radius:14px;background:#141B2D;border:1px solid #1E293B}
-        .cd-num{font-size:24px;font-weight:800;color:#38BDF8;line-height:1}
-        .cd-unit{color:#475569;font-size:9px;font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:1px}
-        .sec-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;letter-spacing:-.5px}
-        .sec-title span{color:#38BDF8}
-        .sec-sub{color:#64748B;text-align:center;font-size:13px;margin-bottom:28px}
-        .divider{height:1px;max-width:120px;margin:0 auto;background:linear-gradient(90deg,transparent,#1E293B,transparent)}
-        .features{padding:48px 0}
-        .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        .feat-card{padding:22px 16px;border-radius:18px;background:#141B2D;border:1px solid #1E293B;transition:border-color .2s}
-        .feat-card:active{border-color:rgba(56,189,248,.2)}
-        .feat-icon{width:44px;height:44px;border-radius:12px;background:rgba(56,189,248,.06);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
-        .feat-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
-        .feat-card p{color:#64748B;font-size:11px;line-height:1.5}
-        .cities{padding:36px 0}
-        .city-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-        .city-pill{padding:9px 16px;border-radius:50px;background:#141B2D;border:1px solid #1E293B;font-size:13px;font-weight:600;color:#CBD5E1}
-        .steps-sec{padding:48px 0}
-        .step-list{max-width:360px;margin:0 auto}
-        .step-item{display:flex;gap:14px;margin-bottom:28px;position:relative}
-        .step-dot{width:42px;height:42px;border-radius:12px;flex-shrink:0;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.1);display:flex;align-items:center;justify-content:center;font-size:18px}
-        .step-item h3{font-size:14px;font-weight:700;margin-bottom:2px}
-        .step-item p{color:#64748B;font-size:12px}
-        .step-connector{position:absolute;left:20px;top:46px;width:2px;height:22px;background:#1E293B;border-radius:1px}
-        .plans-sec{padding:36px 0}
-        .plan-list{display:flex;flex-direction:column;gap:10px}
-        .plan-item{display:flex;align-items:center;gap:16px;padding:18px 16px;border-radius:16px;background:#141B2D;border:2px solid #1E293B;position:relative}
-        .plan-item.popular{border-color:#38BDF8}
-        .plan-tag{position:absolute;top:-9px;right:14px;padding:3px 10px;border-radius:20px;background:linear-gradient(135deg,#38BDF8,#0EA5E9);color:#0B1120;font-size:9px;font-weight:800;letter-spacing:.5px}
-        .plan-price{min-width:58px}
-        .plan-amount{font-size:22px;font-weight:800}
-        .plan-period{font-size:10px;color:#475569;font-weight:600}
-        .plan-amount.t1{color:#64748B}.plan-amount.t2{color:#38BDF8}.plan-amount.t3{color:#A78BFA}
-        .plan-detail h3{font-size:15px;font-weight:700;margin-bottom:2px}
-        .plan-detail p{color:#64748B;font-size:11px}
-        .cta-sec{padding:36px 0 48px}
-        .cta-card{padding:36px 24px;border-radius:24px;text-align:center;background:linear-gradient(135deg,rgba(56,189,248,.05),rgba(167,139,250,.05));border:1px solid rgba(56,189,248,.08)}
-        .cta-logo{width:80px;height:80px;border-radius:20px;margin:0 auto 14px;animation:float 4s ease-in-out infinite;box-shadow:0 6px 24px rgba(0,0,0,.25)}
-        .cta-card h2{font-size:22px;font-weight:800;margin-bottom:8px}
-        .cta-card>p{color:#94A3B8;font-size:13px;margin-bottom:24px}
-        .cta-form{max-width:300px;margin:0 auto}
-        .footer{padding:36px 20px 40px;text-align:center;border-top:1px solid #141B2D}
-        .foot-brand{display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:700;margin-bottom:16px}
-        .foot-brand span{color:#38BDF8}
-        .foot-brand img{border-radius:6px}
-        .foot-social{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
-        .foot-social a{padding:9px 16px;border-radius:10px;font-size:12px;font-weight:600;color:#94A3B8;background:#141B2D;border:1px solid #1E293B;transition:all .2s}
-        .foot-social a:active{border-color:#38BDF8;color:#38BDF8}
-        .foot-copy{color:#334155;font-size:11px}
-        @media(min-width:640px){.hero h1{font-size:38px}.hero-sub{font-size:16px;max-width:380px}.container{padding:0 32px}}
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #fafbfe;
+            --bg2: #ffffff;
+            --surface: #ffffff;
+            --surface-alt: #f1f5f9;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --primary-light: #e0f2fe;
+            --primary-glow: rgba(14,165,233,0.12);
+            --accent: #f59e0b;
+            --accent-light: #fef3c7;
+            --green: #10b981;
+            --green-light: #d1fae5;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow-sm: 0 1px 3px rgba(15,23,42,0.04);
+            --shadow: 0 4px 20px rgba(15,23,42,0.06);
+            --shadow-lg: 0 12px 40px rgba(15,23,42,0.08);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 14px 20px;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .nav-inner {
+            max-width: 1080px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-brand {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none; color: var(--text);
+        }
+        .nav-brand img { width: 34px; height: 34px; border-radius: 10px; }
+        .nav-brand span { font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
+        .nav-brand em { font-style: normal; color: var(--primary); }
+        .nav-links { display: flex; gap: 8px; align-items: center; }
+        .nav-links a.nl {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 14px; font-weight: 500; padding: 6px 12px;
+            border-radius: 8px; transition: all 0.2s;
+        }
+        .nav-links a.nl:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-cta {
+            background: var(--primary); color: #fff;
+            padding: 9px 20px; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 14px; text-decoration: none;
+            transition: all 0.2s; box-shadow: 0 2px 8px rgba(14,165,233,0.25);
+        }
+        .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding: 120px 24px 80px; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -120px; right: -200px;
+            width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: -100px; left: -150px;
+            width: 500px; height: 500px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-inner {
+            max-width: 720px; margin: 0 auto; text-align: center;
+            position: relative; z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--primary-light); border: 1px solid rgba(14,165,233,0.15);
+            padding: 7px 18px; border-radius: 50px;
+            font-size: 13px; color: var(--primary-dark); font-weight: 600;
+            margin-bottom: 28px;
+        }
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(34px, 5.5vw, 56px);
+            font-weight: 800; line-height: 1.1;
+            letter-spacing: -1.5px; margin-bottom: 20px;
+            color: var(--text);
+        }
+        .hero h1 .hl { color: var(--primary); }
+        .hero-desc {
+            font-size: 17px; color: var(--text-secondary);
+            line-height: 1.7; margin-bottom: 36px;
+            max-width: 540px; margin-left: auto; margin-right: auto;
+        }
+        .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn-main {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--primary); color: #fff;
+            padding: 16px 32px; border-radius: 14px;
+            font-weight: 700; font-size: 16px; text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(14,165,233,0.3);
+        }
+        .btn-main:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(14,165,233,0.35); }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--bg2); color: var(--text);
+            padding: 16px 32px; border-radius: 14px;
+            font-weight: 600; font-size: 16px; text-decoration: none;
+            border: 1.5px solid var(--border); transition: all 0.3s;
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+        .hero-proof {
+            margin-top: 40px; display: flex; align-items: center;
+            justify-content: center; gap: 24px; flex-wrap: wrap;
+        }
+        .proof-item {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 13px; color: var(--text-muted); font-weight: 500;
+        }
+        .proof-item svg { width: 16px; height: 16px; color: var(--green); }
+
+        /* ===== SECTIONS COMMON ===== */
+        section { position: relative; z-index: 1; }
+        .section-pad { padding: 80px 24px; }
+        .section-alt { background: var(--surface-alt); }
+        .section-header {
+            text-align: center; margin-bottom: 48px; max-width: 600px;
+            margin-left: auto; margin-right: auto;
+        }
+        .section-header .tag {
+            display: inline-block;
+            font-size: 12px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .section-header h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(26px, 4vw, 38px);
+            font-weight: 700; letter-spacing: -0.8px;
+            line-height: 1.15; margin-bottom: 14px;
+        }
+        .section-header p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; }
+        .container { max-width: 1080px; margin: 0 auto; }
+
+        /* ===== HOW IT WORKS ===== */
+        .steps-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 24px; counter-reset: step;
+        }
+        .step-card {
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 32px 24px;
+            text-align: center; position: relative;
+            transition: all 0.3s; box-shadow: var(--shadow-sm);
+        }
+        .step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .step-num {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: var(--primary-light); color: var(--primary-dark);
+            font-weight: 800; font-size: 18px;
+            display: inline-flex; align-items: center; justify-content: center;
+            margin-bottom: 16px;
+        }
+        .step-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .step-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* ===== FEATURES ===== */
+        .features-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+        }
+        .feature-card {
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px;
+            transition: all 0.3s; box-shadow: var(--shadow-sm);
+            display: flex; gap: 16px; align-items: flex-start;
+        }
+        .feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--primary); }
+        .feature-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+        .fi-blue { background: var(--primary-light); }
+        .fi-amber { background: var(--accent-light); }
+        .fi-green { background: var(--green-light); }
+        .fi-slate { background: #f1f5f9; }
+        .feature-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .feature-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* ===== CITIES ===== */
+        .cities-row {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+        }
+        .city-pill {
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 50px; padding: 12px 24px;
+            display: flex; align-items: center; gap: 8px;
+            font-weight: 600; font-size: 15px;
+            transition: all 0.3s; box-shadow: var(--shadow-sm);
+        }
+        .city-pill:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .city-pill .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--green); display: inline-block;
+        }
+
+        /* ===== PRICING ===== */
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 24px; max-width: 720px; margin: 0 auto;
+        }
+        .price-card {
+            background: var(--bg2); border: 1.5px solid var(--border);
+            border-radius: 20px; padding: 32px 28px;
+            position: relative; transition: all 0.3s; box-shadow: var(--shadow-sm);
+        }
+        .price-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 8px 32px rgba(14,165,233,0.12);
+        }
+        .price-badge {
+            position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: #fff;
+            font-size: 11px; font-weight: 700; padding: 5px 16px;
+            border-radius: 50px; white-space: nowrap;
+        }
+        .price-card .plan-name {
+            font-size: 14px; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+        }
+        .price-card .price {
+            font-family: 'Fraunces', serif;
+            font-size: 40px; font-weight: 800; color: var(--text);
+            line-height: 1;
+        }
+        .price-card .price span { font-size: 16px; font-weight: 500; color: var(--text-muted); }
+        .price-card .price-desc {
+            font-size: 13px; color: var(--text-secondary); margin: 12px 0 20px; line-height: 1.5;
+        }
+        .price-features { list-style: none; margin-bottom: 24px; }
+        .price-features li {
+            font-size: 14px; color: var(--text-secondary);
+            padding: 6px 0; display: flex; align-items: center; gap: 10px;
+        }
+        .price-features li .check {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: var(--green-light); color: var(--green);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; flex-shrink: 0;
+        }
+        .price-features li .cross {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #f1f5f9; color: #94a3b8;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; flex-shrink: 0;
+        }
+        .price-btn {
+            display: block; width: 100%; padding: 14px;
+            border-radius: 12px; text-align: center;
+            font-weight: 700; font-size: 15px;
+            text-decoration: none; transition: all 0.2s;
+            border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+        }
+        .price-btn-primary {
+            background: var(--primary); color: #fff;
+            box-shadow: 0 2px 12px rgba(14,165,233,0.25);
+        }
+        .price-btn-primary:hover { background: var(--primary-dark); }
+        .price-btn-secondary {
+            background: var(--surface-alt); color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .price-btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ===== FAQ ===== */
+        .faq-list { max-width: 680px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+        }
+        .faq-item:first-child { border-top: 1px solid var(--border); }
+        .faq-q {
+            width: 100%; background: none; border: none;
+            padding: 20px 0; text-align: left;
+            font-size: 16px; font-weight: 600; color: var(--text);
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: space-between; gap: 16px;
+            font-family: 'DM Sans', sans-serif; line-height: 1.4;
+        }
+        .faq-q:hover { color: var(--primary); }
+        .faq-arrow {
+            width: 24px; height: 24px; flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+        .faq-item.open .faq-arrow { transform: rotate(180deg); }
+        .faq-a {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+        }
+        .faq-item.open .faq-a { max-height: 500px; }
+        .faq-a-inner {
+            padding: 0 0 20px;
+            font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+        }
+
+        /* ===== CTA BANNER ===== */
+        .cta-banner {
+            padding: 80px 24px;
+        }
+        .cta-box {
+            max-width: 680px; margin: 0 auto;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            border-radius: 24px; padding: 48px 32px;
+            text-align: center; color: #fff;
+            box-shadow: 0 12px 40px rgba(14,165,233,0.25);
+            position: relative; overflow: hidden;
+        }
+        .cta-box::before {
+            content: ''; position: absolute; top: -60px; right: -60px;
+            width: 200px; height: 200px; border-radius: 50%;
+            background: rgba(255,255,255,0.08); pointer-events: none;
+        }
+        .cta-box::after {
+            content: ''; position: absolute; bottom: -40px; left: -40px;
+            width: 150px; height: 150px; border-radius: 50%;
+            background: rgba(255,255,255,0.05); pointer-events: none;
+        }
+        .cta-box h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(24px, 4vw, 34px);
+            font-weight: 700; margin-bottom: 12px;
+            position: relative; z-index: 1;
+        }
+        .cta-box p {
+            font-size: 16px; opacity: 0.9; margin-bottom: 28px;
+            position: relative; z-index: 1;
+        }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: #fff; color: var(--primary-dark);
+            padding: 16px 36px; border-radius: 14px;
+            font-weight: 700; font-size: 16px; text-decoration: none;
+            transition: all 0.3s; position: relative; z-index: 1;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.15); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 24px 32px;
+        }
+        .footer-inner {
+            max-width: 1080px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 16px;
+        }
+        .footer-left {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .footer-left img { width: 28px; height: 28px; border-radius: 8px; }
+        .footer-left span { font-weight: 600; font-size: 14px; color: var(--text-secondary); }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-links a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 13px; font-weight: 500; transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .steps-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+            .nav-links .nl { display: none; }
+            .hero h1 { font-size: 30px; }
+            .hero-desc { font-size: 15px; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .btn-main, .btn-outline { width: 100%; justify-content: center; padding: 14px 24px; font-size: 15px; }
+            .hero-proof { flex-direction: column; gap: 10px; }
+            .cities-row { gap: 10px; }
+            .city-pill { padding: 10px 18px; font-size: 14px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .cta-box { padding: 36px 24px; }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-in.visible {
+            opacity: 1; transform: translateY(0);
+        }
     </style>
 </head>
 <body>
 
-<div class="nav"><div class="nav-inner">
-    <div class="nav-brand"><img src="logo-192.png" width="32" height="32" alt="BackpackRadar"> Backpack<span>Radar</span></div>
-    <div class="nav-links"><a href="https://www.instagram.com/backpackradar" target="_blank">Insta</a><a href="https://www.tiktok.com/@jobsalertpvt" target="_blank">TikTok</a></div>
-</div></div>
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <img src="/logo-192.png" alt="BackpackRadar">
+            <span>Backpack<em>Radar</em></span>
+        </a>
+        <div class="nav-links">
+            <a href="#how" class="nl">Comment ça marche</a>
+            <a href="#pricing" class="nl">Tarifs</a>
+            <a href="#faq" class="nl">FAQ</a>
+            <a href="https://t.me/backpackradar_bot" class="nav-cta" target="_blank">Accéder au bot</a>
+        </div>
+    </div>
+</nav>
 
-<div class="container">
-
+<!-- HERO -->
 <section class="hero">
-    <div class="hero-badge"><div class="hero-dot"></div>Lancement bientôt</div>
-    <img src="logo-512.png" class="hero-logo" alt="BackpackRadar" width="100" height="100">
-    <h1>Ton radar à jobs<br>en <span>Australie</span></h1>
-    <p class="hero-sub">Alertes emploi par IA, outils WHV et communauté backpackers. Tout dans une seule app.</p>
+    <div class="hero-inner">
+        <div class="hero-badge">🇦🇺 Pour les backpackers en WHV / PVT</div>
+        <h1>Trouve un job en Australie <span class="hl">sans effort</span></h1>
+        <p class="hero-desc">BackpackRadar scanne les offres d'emploi sur Seek.com.au, filtre avec l'IA celles adaptées aux backpackers, et te les envoie directement sur Telegram. Automatiquement.</p>
+        <div class="hero-buttons">
+            <a href="https://t.me/backpackradar_bot" class="btn-main" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                Accéder à l'outil
+            </a>
+            <a href="#how" class="btn-outline">Comment ça marche</a>
+        </div>
+        <div class="hero-proof">
+            <div class="proof-item">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                ~100 offres/jour
+            </div>
+            <div class="proof-item">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                5 villes couvertes
+            </div>
+            <div class="proof-item">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                Gratuit pour commencer
+            </div>
+            <div class="proof-item">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                24h/24, 7j/7
+            </div>
+        </div>
+    </div>
 </section>
 
-<div id="formWrap"><div class="form-card"><form id="mainForm" action="https://formspree.io/f/mkopjnyz" method="POST"><div class="form-row"><input type="email" name="email" placeholder="Ton email" required autocomplete="email"><button type="submit" class="btn-main">Rejoindre 🚀</button></div></form><p class="form-note">Gratuit · Pas de spam · On te prévient au lancement</p></div></div>
-<div id="successWrap" class="form-hidden"><div class="success-msg"><span class="emoji">🎉</span><h3>T'es sur la liste !</h3><p>On te prévient dès que l'app est dispo. Welcome mate 🤙</p></div></div>
+<!-- HOW IT WORKS -->
+<section class="section-pad section-alt" id="how">
+    <div class="container">
+        <div class="section-header animate-in">
+            <div class="tag">Comment ça marche</div>
+            <h2>Prêt en 30 secondes, zéro inscription</h2>
+            <p>Pas d'email, pas de mot de passe, pas d'app à télécharger. Tout se passe sur Telegram.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card animate-in">
+                <div class="step-num">1</div>
+                <h3>Ouvre le bot</h3>
+                <p>Cherche <strong>@backpackradar_bot</strong> sur Telegram ou clique sur le bouton ci-dessus. Tape <strong>/start</strong>.</p>
+            </div>
+            <div class="step-card animate-in">
+                <div class="step-num">2</div>
+                <h3>Choisis ta ville</h3>
+                <p>Sélectionne ta langue (FR/EN) puis ta ville parmi Sydney, Melbourne, Brisbane, Perth ou Adelaide.</p>
+            </div>
+            <div class="step-card animate-in">
+                <div class="step-num">3</div>
+                <h3>Reçois les offres</h3>
+                <p>Rejoins ton canal gratuit et reçois les offres d'emploi filtrées par IA directement sur Telegram, en temps réel.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-<section class="cd reveal"><div class="cd-label">Lancement dans</div><div class="cd-boxes"><div class="cd-box"><div class="cd-num" id="cD">--</div><div class="cd-unit">jours</div></div><div class="cd-box"><div class="cd-num" id="cH">--</div><div class="cd-unit">heures</div></div><div class="cd-box"><div class="cd-num" id="cM">--</div><div class="cd-unit">min</div></div><div class="cd-box"><div class="cd-num" id="cS">--</div><div class="cd-unit">sec</div></div></div></section>
+<!-- FEATURES -->
+<section class="section-pad" id="features">
+    <div class="container">
+        <div class="section-header animate-in">
+            <div class="tag">Pourquoi BackpackRadar</div>
+            <h2>Tout le boulot de recherche, en automatique</h2>
+            <p>Plus besoin de scroller Seek pendant des heures. Le bot fait le tri pour toi.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate-in">
+                <div class="feature-icon fi-blue">🤖</div>
+                <div>
+                    <h3>Filtre intelligent par IA</h3>
+                    <p>Chaque offre est analysée par une intelligence artificielle. Seules celles accessibles aux WHV sont envoyées : hospo, farm, retail, construction, cleaning, warehouse...</p>
+                </div>
+            </div>
+            <div class="feature-card animate-in">
+                <div class="feature-icon fi-amber">⚡</div>
+                <div>
+                    <h3>Scan toutes les 40-50 min</h3>
+                    <p>Le bot tourne 24h/24 et scanne les nouvelles offres publiées sur Seek.com.au automatiquement. Tu ne rates rien.</p>
+                </div>
+            </div>
+            <div class="feature-card animate-in">
+                <div class="feature-icon fi-green">🚫</div>
+                <div>
+                    <h3>Offres inaccessibles éliminées</h3>
+                    <p>Les postes qui demandent des diplômes australiens, de l'expérience senior, la citoyenneté ou des certifications spécifiques sont automatiquement exclus.</p>
+                </div>
+            </div>
+            <div class="feature-card animate-in">
+                <div class="feature-icon fi-slate">📱</div>
+                <div>
+                    <h3>Notifications en temps réel</h3>
+                    <p>Chaque nouvelle offre arrive comme une notification Telegram. Postule en premier pendant que l'offre est fraîche.</p>
+                </div>
+            </div>
+            <div class="feature-card animate-in">
+                <div class="feature-icon fi-blue">🌐</div>
+                <div>
+                    <h3>Français & Anglais</h3>
+                    <p>Le bot est bilingue. Choisis ta langue au premier lancement et change à tout moment avec /lang.</p>
+                </div>
+            </div>
+            <div class="feature-card animate-in">
+                <div class="feature-icon fi-amber">🔒</div>
+                <div>
+                    <h3>Paiement sécurisé Stripe</h3>
+                    <p>Le paiement Pro passe par Stripe, la plateforme utilisée par des millions d'entreprises. Résiliation en 2 clics, sans engagement.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<div class="divider"></div>
+<!-- CITIES -->
+<section class="section-pad section-alt" id="cities">
+    <div class="container">
+        <div class="section-header animate-in">
+            <div class="tag">Villes couvertes</div>
+            <h2>5 villes, ~20 offres par ville par jour</h2>
+            <p>Les destinations les plus populaires pour les backpackers en Australie.</p>
+        </div>
+        <div class="cities-row animate-in">
+            <div class="city-pill"><span class="dot"></span> Sydney</div>
+            <div class="city-pill"><span class="dot"></span> Melbourne</div>
+            <div class="city-pill"><span class="dot"></span> Brisbane</div>
+            <div class="city-pill"><span class="dot"></span> Perth</div>
+            <div class="city-pill"><span class="dot"></span> Adelaide</div>
+        </div>
+    </div>
+</section>
 
-<section class="features reveal"><h2 class="sec-title">Tout pour ton <span>WHV</span></h2><p class="sec-sub">Une seule app, zéro prise de tête</p><div class="feat-grid">
-<div class="feat-card"><div class="feat-icon">📡</div><h3>Alertes emploi IA</h3><p>Jobs filtrés pour ton visa, ta ville, tes préférences</p></div>
-<div class="feat-card"><div class="feat-icon">💵</div><h3>Calculateur salaire</h3><p>Brut → net, impôts WHV, super, conversion €</p></div>
-<div class="feat-card"><div class="feat-icon">🌾</div><h3>Tracker 88 jours</h3><p>Comptage avec les vraies règles WHV</p></div>
-<div class="feat-card"><div class="feat-icon">👥</div><h3>Communauté</h3><p>Jobs, logement, tips, sorties par ville</p></div>
-<div class="feat-card"><div class="feat-icon">⏳</div><h3>Countdown visa</h3><p>Compte à rebours + rappels auto</p></div>
-<div class="feat-card"><div class="feat-icon">💰</div><h3>Budget tracker</h3><p>Dépenses + conversion euros live</p></div>
-</div></section>
+<!-- PRICING -->
+<section class="section-pad" id="pricing">
+    <div class="container">
+        <div class="section-header animate-in">
+            <div class="tag">Tarifs</div>
+            <h2>Gratuit pour commencer. Pro pour postuler.</h2>
+            <p>Le plan gratuit n'a aucune limite de temps. Passe Pro quand tu es prêt.</p>
+        </div>
+        <div class="pricing-grid animate-in">
+            <!-- FREE -->
+            <div class="price-card">
+                <div class="plan-name">Gratuit</div>
+                <div class="price">$0</div>
+                <div class="price-desc">Pour toujours. Aucune carte bancaire requise.</div>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> Offres par ville en temps réel</li>
+                    <li><span class="check">✓</span> Titre, entreprise, salaire, type de contrat</li>
+                    <li><span class="check">✓</span> Notifications Telegram</li>
+                    <li><span class="check">✓</span> Français & Anglais</li>
+                    <li><span class="cross">✗</span> Lien pour postuler</li>
+                    <li><span class="cross">✗</span> Accès à toutes les villes</li>
+                </ul>
+                <a href="https://t.me/backpackradar_bot" class="price-btn price-btn-secondary" target="_blank">Commencer gratuitement</a>
+            </div>
+            <!-- PRO -->
+            <div class="price-card featured">
+                <div class="price-badge">⭐ Recommandé</div>
+                <div class="plan-name">Pro</div>
+                <div class="price">$9.99 <span>AUD/mois</span></div>
+                <div class="price-desc">Postule en 1 clic. Résiliation à tout moment.</div>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> Tout le plan gratuit</li>
+                    <li><span class="check">✓</span> Lien direct pour postuler</li>
+                    <li><span class="check">✓</span> Accès aux 5 villes</li>
+                    <li><span class="check">✓</span> Canaux Pro exclusifs</li>
+                    <li><span class="check">✓</span> Gestion abo en 1 clic</li>
+                </ul>
+                <a href="https://t.me/backpackradar_bot" class="price-btn price-btn-primary" target="_blank">Passer Pro</a>
+            </div>
+        </div>
+    </div>
+</section>
 
-<div class="divider"></div>
+<!-- FAQ -->
+<section class="section-pad section-alt" id="faq">
+    <div class="container">
+        <div class="section-header animate-in">
+            <div class="tag">FAQ</div>
+            <h2>Questions fréquentes</h2>
+        </div>
+        <div class="faq-list animate-in">
+            <div class="faq-item">
+                <button class="faq-q">
+                    C'est quoi BackpackRadar exactement ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">BackpackRadar est un bot Telegram qui scanne automatiquement les offres d'emploi sur Seek.com.au, filtre avec l'IA celles qui sont réellement accessibles aux backpackers en WHV/PVT, et les envoie dans des canaux Telegram organisés par ville. Tu reçois les offres sans rien faire.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Comment je m'inscris ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Ouvre Telegram, cherche @backpackradar_bot et tape /start. Choisis ta langue (français ou anglais), puis ta ville. Tu rejoins le canal gratuit et tu commences à recevoir les offres immédiatement. Aucun email, aucun mot de passe.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Quelle est la différence entre le plan gratuit et le plan Pro ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Le plan gratuit te donne accès aux offres avec le titre, l'entreprise, le salaire et le type de contrat, mais sans le lien pour postuler. Le plan Pro à $9.99 AUD/mois te donne le lien direct pour postuler en 1 clic, plus l'accès aux canaux Pro de toutes les villes.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Comment fonctionne le paiement ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Tape /premium dans le bot et clique sur "S'abonner". Tu es redirigé vers une page Stripe sécurisée où tu entres ta carte. Une fois le paiement validé, le bot t'envoie automatiquement les liens d'invitation pour tous les canaux Pro. Le prélèvement est de $9.99 AUD/mois, renouvelé automatiquement.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Comment résilier mon abonnement Pro ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Tape /status ou /premium dans le bot et clique sur "Gérer ton abonnement". Tu arrives sur une page Stripe sécurisée où tu peux annuler en 2 clics. L'abonnement reste actif jusqu'à la fin de la période payée, puis tu repasses automatiquement en plan gratuit.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Quels types de jobs sont proposés ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Hospitality (chef, cook, barista, waiter), retail (shop assistant, cashier), construction et labour (labourer, warehouse, factory), services (cleaner, housekeeper, driver, delivery), admin d'entrée (receptionist, data entry), trades helper, mining entry level, tourism (tour guide, hotel staff), childcare assistant, pet care, et plus encore.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Quels jobs sont exclus et pourquoi ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Les postes de direction (CEO, director, senior manager), les professions réglementées (infirmier, avocat, comptable, architecte), l'ingénierie (software, civil, mechanical), l'enseignement et les graduate programs. Ces offres sont exclues car elles demandent des qualifications australiennes, la citoyenneté ou une expérience senior qu'un backpacker ne peut pas fournir.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Faut-il un compte Seek pour utiliser BackpackRadar ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Non. BackpackRadar te trouve les offres automatiquement. En plan Pro, le lien t'emmène directement sur la page Seek de l'offre. Tu peux créer un compte Seek gratuitement à ce moment-là si l'employeur le demande, mais ce n'est pas toujours nécessaire.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Le bot fonctionne tout le temps ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Oui, 24h/24, 7j/7. Le bot tourne sur un serveur dédié et scanne les nouvelles offres toutes les 40 à 50 minutes automatiquement. Aucune intervention humaine n'est nécessaire.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Comment contacter le support ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Envoie un message à @Backpackradarapp sur Telegram à tout moment. Ce contact est aussi affiché dans chaque message du bot.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">
+                    Le plan gratuit a une limite de temps ?
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a"><div class="faq-a-inner">Non, aucune limite. Le plan gratuit est gratuit pour toujours. Tu reçois les mêmes offres que les membres Pro (titre, entreprise, ville, type de contrat, salaire). Seul le lien pour postuler est réservé au plan Pro.</div></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<section class="cities reveal"><h2 class="sec-title">10 villes 🇦🇺</h2><p class="sec-sub">Alertes et communauté dans chaque ville</p><div class="city-grid">
-<span class="city-pill">🏙️ Sydney</span><span class="city-pill">☕ Melbourne</span><span class="city-pill">🌴 Brisbane</span><span class="city-pill">🌅 Perth</span><span class="city-pill">🍷 Adelaide</span><span class="city-pill">🐊 Cairns</span><span class="city-pill">🏄 Gold Coast</span><span class="city-pill">🦎 Darwin</span><span class="city-pill">⛰️ Hobart</span><span class="city-pill">🏛️ Canberra</span>
-</div></section>
+<!-- CTA -->
+<section class="cta-banner">
+    <div class="cta-box animate-in">
+        <h2>Prêt à trouver un job en Australie ?</h2>
+        <p>Ouvre le bot, choisis ta ville, et reçois tes premières offres dans la minute.</p>
+        <a href="https://t.me/backpackradar_bot" class="cta-btn" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            Accéder à l'outil gratuitement
+        </a>
+    </div>
+</section>
 
-<div class="divider"></div>
-
-<section class="steps-sec reveal"><h2 class="sec-title">Comment ça marche</h2><p class="sec-sub">4 étapes et t'es lancé</p><div class="step-list">
-<div class="step-item"><div class="step-dot">📱</div><div><h3>Télécharge l'app</h3><p>Crée ton compte en 30 secondes</p></div><div class="step-connector"></div></div>
-<div class="step-item"><div class="step-dot">🎯</div><div><h3>Configure tes préférences</h3><p>Ville, secteurs, type de contrat</p></div><div class="step-connector"></div></div>
-<div class="step-item"><div class="step-dot">📡</div><div><h3>Reçois tes alertes</h3><p>Jobs filtrés par IA pour ton WHV</p></div><div class="step-connector"></div></div>
-<div class="step-item"><div class="step-dot">🤙</div><div><h3>Postule et profite</h3><p>Lien direct vers l'offre</p></div></div>
-</div></section>
-
-<div class="divider"></div>
-
-<section class="plans-sec reveal"><h2 class="sec-title">3 plans simples</h2><p class="sec-sub">Commence gratuitement</p><div class="plan-list">
-<div class="plan-item"><div class="plan-price"><div class="plan-amount t1">0$</div></div><div class="plan-detail"><h3>Free</h3><p>1 ville · 3 alertes/jour · Tous les outils</p></div></div>
-<div class="plan-item popular"><div class="plan-tag">POPULAIRE</div><div class="plan-price"><div class="plan-amount t2">7$</div><div class="plan-period">/mois</div></div><div class="plan-detail"><h3>City</h3><p>Alertes illimitées · Push · Tous les filtres</p></div></div>
-<div class="plan-item"><div class="plan-price"><div class="plan-amount t3">19$</div><div class="plan-period">/mois</div></div><div class="plan-detail"><h3>All Cities</h3><p>10 villes · Alertes prioritaires · Export</p></div></div>
-</div></section>
-
-<section class="cta-sec reveal"><div class="cta-card">
-    <img src="logo-512.png" class="cta-logo" alt="BackpackRadar" width="80" height="80">
-    <h2>Rejoins la meute</h2>
-    <p>Sois parmi les premiers à tester BackpackRadar</p>
-    <div class="cta-form"><form id="ctaForm" action="https://formspree.io/f/mkopjnyz" method="POST"><div class="form-row"><input type="email" name="email" placeholder="Ton email" required autocomplete="email"><button type="submit" class="btn-main">Go 🚀</button></div></form></div>
-</div></section>
-
-</div>
-
-<footer class="footer">
-    <div class="foot-brand"><img src="logo-192.png" width="24" height="24" alt="BackpackRadar"> Backpack<span>Radar</span></div>
-    <div class="foot-social"><a href="https://www.instagram.com/backpackradar" target="_blank">📸 Instagram</a><a href="https://www.tiktok.com/@jobsalertpvt" target="_blank">🎵 TikTok</a></div>
-    <p class="foot-copy">© 2026 BackpackRadar · Ton radar à jobs en Australie</p>
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <img src="/logo-192.png" alt="BackpackRadar">
+            <span>BackpackRadar</span>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy.html">Confidentialité</a>
+            <a href="/terms.html">Conditions</a>
+            <a href="https://t.me/Backpackradarapp" target="_blank">Contact</a>
+        </div>
+        <div class="footer-copy">&copy; 2026 BackpackRadar</div>
+    </div>
 </footer>
 
 <script>
-var L=new Date('2026-08-01T00:00:00').getTime();function tick(){var d=L-Date.now();if(d<=0)return;document.getElementById('cD').textContent=Math.floor(d/864e5);document.getElementById('cH').textContent=Math.floor((d%864e5)/36e5);document.getElementById('cM').textContent=Math.floor((d%36e5)/6e4);document.getElementById('cS').textContent=Math.floor((d%6e4)/1e3)}tick();setInterval(tick,1e3);
-function bindForm(f){f.addEventListener('submit',function(e){e.preventDefault();fetch(f.action,{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}}).then(function(r){if(r.ok){document.getElementById('formWrap').classList.add('form-hidden');document.getElementById('successWrap').classList.remove('form-hidden');var c=document.getElementById('ctaForm');if(c)c.innerHTML='<p style="color:#22C55E;font-weight:700;font-size:14px">✅ Déjà inscrit !</p>'}}).catch(function(){alert('Erreur réseau, réessaie !')})})}
-bindForm(document.getElementById('mainForm'));bindForm(document.getElementById('ctaForm'));
-var els=document.querySelectorAll('.reveal');var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});els.forEach(function(el){obs.observe(el)});
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        // close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+    });
+});
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
 </script>
+
 </body>
 </html>
